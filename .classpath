@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="second_gui/src"/>
+	<classpathentry kind="lib" path="C:/Users/vekyo/Desktop/Java JARS/apache.coomons/org.apache.commons.io.jar"/>
+	<classpathentry kind="lib" path="C:/Users/vekyo/Desktop/Java JARS/java-json/java-json/java-json.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
