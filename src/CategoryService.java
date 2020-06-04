@@ -33,7 +33,7 @@ public class CategoryService {
     	});
     }
     
-    public Category getCategory(String title) {
+    public Category findCategory(String title) {
     	Category result=null;
     	for(Category cat:this.categories) {
     		if(cat.title.equalsIgnoreCase(title)) {
