@@ -12,4 +12,9 @@ public class Category {
 	        this.creator = creator;
 	        this._id=_id;
 	    }
+		@Override
+		public String toString() {
+			return "Category [title=" + title + ", amount=" + amount + ", amountUsed=" + amountUsed + "]";
+		}
+	    
 }

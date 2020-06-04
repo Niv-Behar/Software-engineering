@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
 
 public class CategoryService {
     private static final String restURL = "http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/" + "api/category";
-    ArrayList<Category> categories;
+    List<Category> categories;
 
     //Singleton
     private CategoryService() {
@@ -24,8 +25,40 @@ public class CategoryService {
         return INSTANCE;
     }
     //Singleton
+    
+    public void printCategories() {
+    	System.out.println("Printing categories:");
+    	this.categories.forEach(category->{
+    		System.out.println(category);
+    	});
+    }
+    
+    public Category getCategory(String title) {
+    	Category result=null;
+    	for(Category cat:this.categories) {
+    		if(cat.title.equalsIgnoreCase(title)) {
+    			result=cat;
+    			
+    		}
+    	}
+    	return result;
+    }
 
     public boolean addCategory(String title, int amount, int amountUsed, String creator, String token) {
+    	//Checking if Category already exists to avoid duplicates:
+    	boolean alreadyExists=false;
+    	for(Category cat:this.categories) {
+    		if(cat.title.equalsIgnoreCase(title)) {
+    			alreadyExists=true;
+    		}
+    	}
+    	if(alreadyExists==true) {
+    		System.out.println("Category already exists!");
+    		return false;
+    	}
+    	//Check ends here
+    	
+    	
         String query_url = restURL;
         String json = "{ \"title\":\"" + title + "\",\"amount\":\"" + amount + "\",\"amountUsed\":\"" + amountUsed + "\" }";
         boolean result = true;
@@ -105,6 +138,8 @@ public class CategoryService {
 
     public boolean updateCategory(Category category,String token) {
         String query_url = restURL;
+//    	String query_url="http://localhost:3000/api/category";
+    	System.out.println("passed the query url string");
         boolean result = true;
         try {
             JSONObject JSON=new JSONObject().put("title",category.title).put("amount",category.amount)
@@ -123,7 +158,10 @@ public class CategoryService {
             OutputStream os = conn.getOutputStream();
             os.write(json.getBytes("UTF-8"));
             os.close();
+            System.out.println("passed until response");
             // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            String response = IOUtils.toString(in, "UTF-8");
             //Here we dont care about the response ! we only care about the
             //Status not failing!
             this.categories.removeIf(cat->{

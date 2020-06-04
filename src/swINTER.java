@@ -49,6 +49,22 @@ public class swINTER extends JFrame {
 	 * Create the frame.
 	 */
 	public swINTER() {
+		//Creating the service classes!
+		UserService userService=UserService.getInstance();
+		CategoryService categoryService=CategoryService.getInstance();
+		//----------------
+		userService.login("1111@1111", "1111");
+		categoryService.getCategories(userService.getToken());
+		//categoryService.addCategory("Gas", 800, 0, userService.getUserId(), userService.getToken());
+		categoryService.printCategories();
+		System.out.println("////////////////");
+		Category updatedCat=categoryService.getCategory("Gas");
+		updatedCat.amountUsed=201;
+		updatedCat.title="Ahoshi";
+		categoryService.updateCategory(updatedCat, userService.getToken());
+		categoryService.getCategories(userService.getToken());
+		categoryService.printCategories();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 559);
 		contentPane = new JPanel();
@@ -797,4 +813,6 @@ public class swINTER extends JFrame {
 		monthly_revenueBTN_2_2_2_2_1.setBounds(15, 16, 290, 32);
 		expense_by_name.add(monthly_revenueBTN_2_2_2_2_1);
 	}
+
+
 }
