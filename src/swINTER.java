@@ -49,7 +49,7 @@ public class swINTER extends JFrame {
 	 * Create the frame.
 	 */
 	public swINTER() {
-		//Creating the service classes!
+		/*//Creating the service classes!
 		UserService userService=UserService.getInstance();
 		CategoryService categoryService=CategoryService.getInstance();
 		//----------------
@@ -64,7 +64,7 @@ public class swINTER extends JFrame {
 		categoryService.updateCategory(updatedCat, userService.getToken());
 		categoryService.getCategories(userService.getToken());
 		categoryService.printCategories();
-		
+		*/
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 559);
 		contentPane = new JPanel();
