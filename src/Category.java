@@ -13,5 +13,11 @@ public class Category extends Operation{
 		public String toString() {
 			return "Category [title=" + title + ", amount=" + amount + ", amountUsed=" + amountUsed + "]";
 		}
-	    
+		
+		public String get_id() {
+			return _id;
+		}
+	    public int getAmountUsed() {
+			return amountUsed;
+		}
 }
