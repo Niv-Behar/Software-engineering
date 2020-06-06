@@ -725,9 +725,14 @@ public class swINTER extends JFrame {
 		btnNewButton_13.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Category DeleteCat = categoryService.findCategory(textDeleteCat.getText());
-				categoryService.deleteCategory(DeleteCat._id, userService.getToken());
+				Category deletedCat = categoryService.findCategory(textDeleteCat.getText());
+				if(deletedCat!=null) {
+				categoryService.deleteCategory(deletedCat._id, userService.getToken());
 				categoryService.printCategories();
+				}else{
+					//TODO
+					//ERROR IF deletedCat doesn't exists!
+				}
 			}
 		});
 		btnNewButton_13.setBounds(214, 453, 115, 29);

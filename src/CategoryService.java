@@ -160,12 +160,6 @@ public class CategoryService {
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String response = IOUtils.toString(in, "UTF-8");
-            //Here we dont care about the response ! we only care about the
-            //Status not failing!
-//            this.categories.removeIf(cat->{
-//                return cat._id.equals(category._id);
-//            });
-//            this.categories.add(category);
             //Closing connection
             conn.disconnect();
         } catch (Exception e) {
@@ -200,7 +194,7 @@ public class CategoryService {
              conn.disconnect();
          } catch (Exception e) {
              //In case of unsuccessful response with status of other then 200/201....
-             System.out.println("Authentication failed");
+             System.out.println("Error");
              result = false;
          }
          return result;
