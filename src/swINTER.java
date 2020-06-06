@@ -60,7 +60,7 @@ public class swINTER extends JFrame {
 		System.out.println("////////////////");
 		Category updatedCat=categoryService.findCategory("Gas");
 		updatedCat.amountUsed=201;
-		updatedCat.title="Ahoshi";
+		updatedCat.title="Anat";
 		categoryService.updateCategory(updatedCat, userService.getToken());
 		categoryService.getCategories(userService.getToken());
 		categoryService.printCategories();
