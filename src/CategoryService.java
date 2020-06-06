@@ -137,6 +137,19 @@ public class CategoryService {
 
 
     public boolean updateCategory(Category category,String token) {
+    	//Checking if Category already exists to avoid duplicates:
+    	boolean alreadyExists=false;
+    	for(Category cat:this.categories) {
+    		if(cat.title.equalsIgnoreCase(category.title)) {
+    			alreadyExists=true;
+    		}
+    	}
+    	if(alreadyExists==true) {
+    		System.out.println("Category already exists!");
+    		return false;
+    	}
+    	////////////////////////
+    	
         String query_url = restURL;
         boolean result = true;
         try {
@@ -184,8 +197,8 @@ public class CategoryService {
              conn.setDoInput(true);
              conn.setRequestMethod("DELETE");
              // read the response
-             InputStream in = new BufferedInputStream(conn.getInputStream());
-             String response = IOUtils.toString(in, "UTF-8");
+            //  InputStream in = new BufferedInputStream(conn.getInputStream());
+            // String response = IOUtils.toString(in, "UTF-8");
              this.categories.removeIf(cat->{
                  return cat._id.equals(_id);
              });
