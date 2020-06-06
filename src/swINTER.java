@@ -58,13 +58,20 @@ public class swINTER extends JFrame {
 		//categoryService.addCategory("Gas", 800, 0, userService.getUserId(), userService.getToken());
 		categoryService.printCategories();
 		System.out.println("////////////////");
-		Category updatedCat=categoryService.findCategory("Gas");
+		Category updatedCat=categoryService.findCategory("Shoshi");
 		updatedCat.amountUsed=201;
-		updatedCat.title="Ahoshi";
+		updatedCat.title="Oz";
 		categoryService.updateCategory(updatedCat, userService.getToken());
 		categoryService.getCategories(userService.getToken());
 		categoryService.printCategories();
+<<<<<<< HEAD
 		*/
+=======
+		categoryService.deleteCategory(updatedCat._id, userService.getToken());
+		categoryService.getCategories(userService.getToken());
+		categoryService.printCategories();
+		
+>>>>>>> e7c3121e0d9cdeb64f97038bc8526953b833fb46
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 559);
 		contentPane = new JPanel();
