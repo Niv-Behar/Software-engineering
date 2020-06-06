@@ -58,10 +58,13 @@ public class swINTER extends JFrame {
 		//categoryService.addCategory("Gas", 800, 0, userService.getUserId(), userService.getToken());
 		categoryService.printCategories();
 		System.out.println("////////////////");
-		Category updatedCat=categoryService.findCategory("Gas");
+		Category updatedCat=categoryService.findCategory("Shoshi");
 		updatedCat.amountUsed=201;
-		updatedCat.title="Anat";
+		updatedCat.title="Oz";
 		categoryService.updateCategory(updatedCat, userService.getToken());
+		categoryService.getCategories(userService.getToken());
+		categoryService.printCategories();
+		categoryService.deleteCategory(updatedCat._id, userService.getToken());
 		categoryService.getCategories(userService.getToken());
 		categoryService.printCategories();
 		

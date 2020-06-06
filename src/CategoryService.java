@@ -138,8 +138,6 @@ public class CategoryService {
 
     public boolean updateCategory(Category category,String token) {
         String query_url = restURL;
-//    	String query_url="http://localhost:3000/api/category";
-    	System.out.println("passed the query url string");
         boolean result = true;
         try {
             JSONObject JSON=new JSONObject().put("title",category.title).put("amount",category.amount)
@@ -164,10 +162,10 @@ public class CategoryService {
             String response = IOUtils.toString(in, "UTF-8");
             //Here we dont care about the response ! we only care about the
             //Status not failing!
-            this.categories.removeIf(cat->{
-                return cat._id.equals(category._id);
-            });
-            this.categories.add(category);
+//            this.categories.removeIf(cat->{
+//                return cat._id.equals(category._id);
+//            });
+//            this.categories.add(category);
             //Closing connection
             conn.disconnect();
         } catch (Exception e) {
@@ -178,7 +176,33 @@ public class CategoryService {
         return result;
     }
 
-    public void deleteCategory() {
-      //TODO
+    public boolean deleteCategory(String _id,String token) {
+    	 String query_url = restURL+"/"+_id;
+         boolean result = true;
+         try {
+             URL url = new URL(query_url);
+             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+             conn.setConnectTimeout(5000);
+             //Setting header: for authorization
+             conn.setRequestProperty("Authorization", "Bearer " + token);
+             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+             conn.setDoOutput(true);
+             conn.setDoInput(true);
+             conn.setRequestMethod("DELETE");
+             // read the response
+             InputStream in = new BufferedInputStream(conn.getInputStream());
+             String response = IOUtils.toString(in, "UTF-8");
+             this.categories.removeIf(cat->{
+                 return cat._id.equals(_id);
+             });
+
+             //Closing connection
+             conn.disconnect();
+         } catch (Exception e) {
+             //In case of unsuccessful response with status of other then 200/201....
+             System.out.println("Authentication failed");
+             result = false;
+         }
+         return result;
     }
 }
