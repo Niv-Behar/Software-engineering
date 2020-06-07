@@ -154,7 +154,7 @@ public class CategoryService {
         boolean result = true;
         try {
             JSONObject JSON=new JSONObject().put("title",category.title).put("amount",category.amount)
-                    .put("amountUsed",category.amountUsed).put("creator",category.creator)
+                    .put("amountUsed",category.amountUsed).put("creator",category.getCreator())
                     .put("_id",category._id);
             String json=JSON.toString();
             URL url = new URL(query_url);

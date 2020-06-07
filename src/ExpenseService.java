@@ -32,10 +32,10 @@ public class ExpenseService {
 
 	// returns an array of expenses that belong to a certain category of choice
 	public Expense[] findExpensesByCategory(String title) {
-		String categoryId = categoryService.findCategory(title).get_id();
+		String categoryId = categoryService.findCategory(title).getId();
 		ArrayList<Expense> foundExpenses = new ArrayList<>();
 		for (Expense exp : expenses) {
-			if (exp.get_id().contentEquals(categoryId)) {
+			if (exp.getId().contentEquals(categoryId)) {
 				foundExpenses.add(exp);
 			}
 		}
@@ -56,7 +56,7 @@ public class ExpenseService {
 		boolean result = true;
 		try {
 			JSONObject JSON = new JSONObject().put("title", title).put("amount", amount).put("categoryId",
-					foundCategory.get_id());
+					foundCategory.getId());
 			String json = JSON.toString();
 			URL url = new URL(query_url);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -76,7 +76,7 @@ public class ExpenseService {
 			// Parsing the json object from response :
 			JSONObject myResponse = new JSONObject(response);
 			String _id = myResponse.getString("_id");
-			Expense expense = new Expense(title, amount, userService.getUserId(), _id, foundCategory.get_id());
+			Expense expense = new Expense(title, amount, userService.getUserId(), _id, foundCategory.getId());
 			this.expenses.add(expense);
 			foundCategory.amountUsed += amount;
 			this.categoryService.updateCategory(foundCategory, userService.getToken());
@@ -154,7 +154,7 @@ public class ExpenseService {
 		 Category foundCategory=categoryService.findCategory(categoryTitle);
 		 if(foundCategory==null) {return false;}
 		 Expense foundExpense=findExpense(title,amount,foundCategory._id);
-		 String query_url = restURL+"/"+foundExpense.get_id();
+		 String query_url = restURL+"/"+foundExpense.getId();
          boolean result = true;
          try {
              URL url = new URL(query_url);
@@ -168,7 +168,7 @@ public class ExpenseService {
              conn.setRequestMethod("DELETE");
              // read the response
              this.expenses.removeIf(exp->{
-            	 return exp.get_id().equals(foundCategory._id);
+            	 return exp.getId().equals(foundCategory._id);
              });
              foundCategory.amountUsed-=amount;
              categoryService.updateCategory(foundCategory, userService.getToken());
@@ -184,7 +184,7 @@ public class ExpenseService {
     }
 	
 	public boolean deleteAllExpensesInCategory(String categoryTitle) {
-		String categoryId=categoryService.findCategory(categoryTitle).get_id();
+		String categoryId=categoryService.findCategory(categoryTitle).getId();
 		 String query_url = restURL+"/"+categoryId;
          boolean result = true;
          try {

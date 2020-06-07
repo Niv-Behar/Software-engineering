@@ -1,32 +1,61 @@
 
 public class Expense extends Operation {
-	
+
 	private String creator;
-	private String _id;
 	private String categoryId;
-	
-	public Expense(String title,int amount,String creator,String _id,String categoryId) {
-		super(title,amount);
-		this.creator=creator;
-		this._id=_id;
-		this.categoryId=categoryId;
+
+	public Expense(String title, int amount, String creator, String _id, String categoryId) {
+		super(title, amount, _id);
+		this.creator = creator;
+		this.categoryId = categoryId;
 	}
+
 	public String getCreator() {
 		return creator;
 	}
-	public String get_id() {
+
+	@Override
+	public String getId() {
 		return _id;
 	}
-	public void set_id(String _id) {
+
+	@Override
+	public void setId(String _id) {
 		this._id = _id;
 	}
+
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
+
 	public String getCategoryId() {
 		return categoryId;
 	}
-     public void setCategoryId(String categoryId) {
+
+	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
+
+	@Override
+	String getTitle() {
+		return this.title;
+	}
+
+	@Override
+	int getAmount() {
+		return this.amount;
+	}
+
+	@Override
+	void setTitle(String title) {
+		this.title = title;
+
+	}
+
+	@Override
+	void setAmount(int amount) {
+		this.amount = amount;
+
+	}
+
 }
