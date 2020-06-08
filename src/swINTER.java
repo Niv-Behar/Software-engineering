@@ -55,6 +55,7 @@ public class swINTER extends JFrame {
 		//Creating the Services:
 		UserService userService = UserService.getInstance();
 		CategoryService categoryService = CategoryService.getInstance();
+		ExpenseService expenseService = ExpenseService.getInstance();
         //----------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 559);
@@ -442,7 +443,7 @@ public class swINTER extends JFrame {
 				display_expense.setVisible(true);
 			}
 		});
-		btnNewButton_11_1.setBounds(15, 114, 177, 29);
+		btnNewButton_11_1.setBounds(268, 204, 177, 29);
 		expense.add(btnNewButton_11_1);
 
 		JPanel delete_expense = new JPanel();
@@ -552,6 +553,23 @@ public class swINTER extends JFrame {
 		});
 		btnNewButton_5.setBounds(344, 453, 115, 29);
 		expense.add(btnNewButton_5);
+		
+		JPanel expense_delete_all = new JPanel();
+		expense_delete_all.setBackground(new Color(165, 42, 42));
+		expense_delete_all.setForeground(new Color(0, 0, 0));
+		layeredPane.add(expense_delete_all, "name_1473791526164100");
+		expense_delete_all.setLayout(null);
+		
+		JButton btnNewButton_18 = new JButton("delete all");
+		btnNewButton_18.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				expense.setVisible(false);
+				expense_delete_all.setVisible(true);			
+			}
+		});
+		btnNewButton_18.setBounds(15, 114, 177, 29);
+		expense.add(btnNewButton_18);
 
 		JLabel lblNewLabel_6 = new JLabel("Monthly budget");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -785,6 +803,63 @@ public class swINTER extends JFrame {
 		});
 		btnNewButton_4_2_1_2_1.setBounds(344, 453, 115, 29);
 		update_expense.add(btnNewButton_4_2_1_2_1);
+		
+		JLabel lblNewLabel_10_4 = new JLabel("choose expense");
+		lblNewLabel_10_4.setBounds(15, 131, 127, 20);
+		update_expense.add(lblNewLabel_10_4);
+		
+		JTextPane textUpExChooseExpense = new JTextPane();
+		textUpExChooseExpense.setBounds(15, 156, 144, 26);
+		update_expense.add(textUpExChooseExpense);
+		
+		JLabel lblNewLabel_11_1 = new JLabel("new details");
+		lblNewLabel_11_1.setFont(new Font("Tahoma", Font.BOLD, 24));
+		lblNewLabel_11_1.setBounds(15, 219, 264, 20);
+		update_expense.add(lblNewLabel_11_1);
+		
+		JLabel lblNewLabel_10_1_1 = new JLabel("expense name");
+		lblNewLabel_10_1_1.setBounds(15, 247, 127, 20);
+		update_expense.add(lblNewLabel_10_1_1);
+		
+		JTextPane textUpExpenseName = new JTextPane();
+		textUpExpenseName.setBounds(15, 272, 144, 26);
+		update_expense.add(textUpExpenseName);
+		
+		JLabel lblNewLabel_10_2_1 = new JLabel("expense amount");
+		lblNewLabel_10_2_1.setBounds(15, 314, 127, 20);
+		update_expense.add(lblNewLabel_10_2_1);
+		
+		JTextPane textUpExpenseAmount = new JTextPane();
+		textUpExpenseAmount.setBounds(15, 339, 144, 26);
+		update_expense.add(textUpExpenseAmount);
+		
+		JTextPane textUpExChooseCat = new JTextPane();
+		textUpExChooseCat.setBounds(15, 89, 144, 26);
+		update_expense.add(textUpExChooseCat);
+		
+		JButton btnNewButton_19 = new JButton("update");
+		btnNewButton_19.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Expense updateExpense = expenseService.findExpense(textUpExChooseExpense.getText(), 0, textUpExChooseCat.getText()); //amount 0, cat_id
+				if (!textUpExpenseName.getText().equalsIgnoreCase(""))
+				{
+					updateExpense.title = textUpExpenseName.getText();
+				}
+				if (!textUpExpenseAmount.getText().equalsIgnoreCase(""))
+				{
+					updateExpense.amount = Integer.parseInt(textUpExpenseAmount.getText());
+				}
+				expenseService.printExpensesByCategory();			
+			}
+		});
+		btnNewButton_19.setBounds(214, 453, 115, 29);
+		update_expense.add(btnNewButton_19);
+		
+		JLabel lblNewLabel_10_4_1 = new JLabel("choose category");
+		lblNewLabel_10_4_1.setBounds(15, 64, 127, 20);
+		update_expense.add(lblNewLabel_10_4_1);
+		
 
 		JButton btnNewButton_4_2_1_2_2 = new JButton("back");
 		btnNewButton_4_2_1_2_2.addMouseListener(new MouseAdapter() {
@@ -801,6 +876,42 @@ public class swINTER extends JFrame {
 		monthly_revenueBTN_2_1.setFont(new Font("Tahoma", Font.BOLD, 26));
 		monthly_revenueBTN_2_1.setBounds(15, 16, 264, 32);
 		add_expense.add(monthly_revenueBTN_2_1);
+		
+		JLabel lblNewLabel_7_1 = new JLabel("title");
+		lblNewLabel_7_1.setBounds(15, 64, 69, 20);
+		add_expense.add(lblNewLabel_7_1);
+		
+		JTextPane textAddExpenseTitle = new JTextPane();
+		textAddExpenseTitle.setBounds(15, 87, 187, 26);
+		add_expense.add(textAddExpenseTitle);
+		
+		JLabel lblNewLabel_8_1 = new JLabel("amount");
+		lblNewLabel_8_1.setBounds(15, 137, 69, 20);
+		add_expense.add(lblNewLabel_8_1);
+		
+		JTextPane textAddExpenseAmount = new JTextPane();
+		textAddExpenseAmount.setBounds(15, 161, 187, 26);
+		add_expense.add(textAddExpenseAmount);
+		
+		JTextPane textAddExpenseCatName = new JTextPane();
+		textAddExpenseCatName.setBounds(15, 234, 187, 26);
+		add_expense.add(textAddExpenseCatName);
+		
+		JButton btnAdd_1 = new JButton("add");
+		btnAdd_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				expenseService.addExpenseToCategory(textAddExpenseTitle.getText(), Integer.parseInt(textAddExpenseAmount.getText()),textAddExpenseCatName.getText());
+				expenseService.printExpensesByCategory();				
+			}
+		});
+		btnAdd_1.setBounds(210, 453, 115, 29);
+		add_expense.add(btnAdd_1);
+		
+		JLabel lblNewLabel_8_1_1 = new JLabel("category name");
+		lblNewLabel_8_1_1.setBounds(15, 210, 127, 20);
+		add_expense.add(lblNewLabel_8_1_1);
+		
 
 		JLabel monthly_revenueBTN_2_2 = new JLabel("display expense:");
 		monthly_revenueBTN_2_2.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -833,6 +944,42 @@ public class swINTER extends JFrame {
 		monthly_revenueBTN_2_2_1.setFont(new Font("Tahoma", Font.BOLD, 26));
 		monthly_revenueBTN_2_2_1.setBounds(15, 16, 264, 32);
 		delete_expense.add(monthly_revenueBTN_2_2_1);
+		
+		JLabel lblNewLabel_21 = new JLabel("category name");
+		lblNewLabel_21.setBounds(15, 64, 109, 20);
+		delete_expense.add(lblNewLabel_21);
+		
+		JTextPane textDeleteCatName = new JTextPane();
+		textDeleteCatName.setBounds(15, 87, 149, 26);
+		delete_expense.add(textDeleteCatName);
+		
+		JLabel lblNewLabel_21_1 = new JLabel("expense name");
+		lblNewLabel_21_1.setBounds(15, 129, 109, 20);
+		delete_expense.add(lblNewLabel_21_1);
+		
+		JTextPane textDeleteExName = new JTextPane();
+		textDeleteExName.setBounds(15, 152, 149, 26);
+		delete_expense.add(textDeleteExName);
+		
+		JButton btnNewButton_20 = new JButton("delete");
+		btnNewButton_20.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Expense deleteEx = expenseService.findExpense(textDeleteExName.getText(), 0, textDeleteCatName.getText()); //amount 0, cat_id 
+				if (deleteEx!=null)
+				{
+					expenseService.deleteExpense(deleteEx.title, 0, textDeleteCatName.getText());
+					expenseService.printExpensesByCategory();
+				}
+				else
+				{
+					//TODO
+					//ERROR IF deleteEX DOESN'T EXISTS!
+				}
+			}
+		});
+		btnNewButton_20.setBounds(214, 453, 115, 29);
+		delete_expense.add(btnNewButton_20);
 
 		JLabel monthly_revenueBTN_2_2_2 = new JLabel("monthly expense:");
 		monthly_revenueBTN_2_2_2.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -902,5 +1049,50 @@ public class swINTER extends JFrame {
 		monthly_revenueBTN_2_2_2_2_1.setFont(new Font("Tahoma", Font.BOLD, 26));
 		monthly_revenueBTN_2_2_2_2_1.setBounds(15, 16, 290, 32);
 		expense_by_name.add(monthly_revenueBTN_2_2_2_2_1);
+		
+		
+		JLabel monthly_revenueBTN_2_2_1_1 = new JLabel("delete all expense:");
+		monthly_revenueBTN_2_2_1_1.setFont(new Font("Tahoma", Font.BOLD, 26));
+		monthly_revenueBTN_2_2_1_1.setBounds(15, 16, 264, 32);
+		expense_delete_all.add(monthly_revenueBTN_2_2_1_1);
+		
+		JLabel lblNewLabel_21_2 = new JLabel("category name");
+		lblNewLabel_21_2.setBounds(15, 64, 109, 20);
+		expense_delete_all.add(lblNewLabel_21_2);
+		
+		JTextPane textExDeleteAllCatName = new JTextPane();
+		textExDeleteAllCatName.setBounds(15, 87, 149, 26);
+		expense_delete_all.add(textExDeleteAllCatName);
+		
+		JButton btnNewButton_21 = new JButton("back");
+		btnNewButton_21.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				expense_delete_all.setVisible(false);
+				expense.setVisible(true);
+			}
+		});
+		btnNewButton_21.setBounds(344, 453, 115, 29);
+		expense_delete_all.add(btnNewButton_21);
+		
+		JButton btnNewButton_22 = new JButton("delete");
+		btnNewButton_22.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Category deleteAllEx = categoryService.findCategory(textExDeleteAllCatName.getText());
+				if (deleteAllEx!=null)
+				{
+					expenseService.deleteAllExpensesInCategory(deleteAllEx.title);
+					expenseService.printExpensesByCategory();
+				}
+				else
+				{
+					//TODO
+					//ERROR IF deleteAllEx DOESN'T EXISTS
+				}	
+			}
+		});
+		btnNewButton_22.setBounds(214, 453, 115, 29);
+		expense_delete_all.add(btnNewButton_22);
 	}
 }
