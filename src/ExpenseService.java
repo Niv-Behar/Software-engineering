@@ -92,6 +92,8 @@ public class ExpenseService {
 				this.expenses.put(foundCategory.getId(),newList );
 			}
 			foundCategory.amountUsed += amount;
+			System.out.println("amount is :"+foundCategory.amount);
+			System.out.println("amountUsed is now :"+foundCategory.amountUsed);
 			this.categoryService.updateCategory(foundCategory, userService.getToken());
 			// Closing connection
 			in.close();
@@ -188,6 +190,8 @@ public class ExpenseService {
 			conn.setDoInput(true);
 			conn.setRequestMethod("DELETE");
 			// read the response
+			  InputStream in = new BufferedInputStream(conn.getInputStream());
+	             String response = IOUtils.toString(in, "UTF-8");
 			this.expenses.get(foundCategory.getId()).remove(foundExpense);
 			foundCategory.amountUsed -= amount;
 			categoryService.updateCategory(foundCategory, userService.getToken());
@@ -218,6 +222,8 @@ public class ExpenseService {
 			conn.setDoInput(true);
 			conn.setRequestMethod("DELETE");
 			// ---------------
+			  InputStream in = new BufferedInputStream(conn.getInputStream());
+	             String response = IOUtils.toString(in, "UTF-8");
 			this.expenses.remove(categoryId);
 			foundCategory.amountUsed=0;
 			categoryService.updateCategory(foundCategory,userService.getToken());

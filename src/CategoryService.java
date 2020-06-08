@@ -144,8 +144,8 @@ public class CategoryService {
     			alreadyExists=true;
     		}
     	}
-    	if(alreadyExists==true) {
-    		System.out.println("Category already exists!");
+    	if(!alreadyExists==true) {
+    		System.out.println("Category doesnt exists!");
     		return false;
     	}
     	////////////////////////
@@ -197,8 +197,8 @@ public class CategoryService {
              conn.setDoInput(true);
              conn.setRequestMethod("DELETE");
              // read the response
-            //  InputStream in = new BufferedInputStream(conn.getInputStream());
-            // String response = IOUtils.toString(in, "UTF-8");
+             InputStream in = new BufferedInputStream(conn.getInputStream());
+             String response = IOUtils.toString(in, "UTF-8");
              this.categories.removeIf(cat->{
                  return cat._id.equals(_id);
              });
