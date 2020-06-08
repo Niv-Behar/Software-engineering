@@ -43,6 +43,16 @@ public class ExpenseService {
 		return (Expense[]) foundExpenses.toArray();
 
 	}
+	public void printExpensesByCategory() {
+		for(Category cat:categoryService.categories) {
+			System.out.println(cat);
+			for(Expense exp:this.expenses) {
+				if(exp.getCategoryId().equals(cat._id)) {
+					System.out.println(exp);
+				}
+			}
+		}
+	}
 
 	// Adding an expense and updating the amountUsed in that category!
 	public boolean addExpenseToCategory(String title, int amount, String categoryName) {

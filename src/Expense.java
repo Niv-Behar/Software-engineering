@@ -58,4 +58,9 @@ public class Expense extends Operation {
 
 	}
 
+	@Override
+	public String toString() {
+		return "Expense [title=" + title + ", amount=" + amount + "]";
+	}
+
 }
