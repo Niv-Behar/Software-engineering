@@ -41,14 +41,6 @@ public class ExpenseService {
 	}
 
 	public void printExpensesByCategory() {
-//		for(Category cat:categoryService.categories) {
-//			System.out.println(cat);
-//			for(Expense exp:this.expenses) {
-//				if(exp.getCategoryId().equals(cat._id)) {
-//					System.out.println(exp);
-//				}
-//			}
-//		}
 		this.expenses.forEach((categoryId, expenseList) -> {
 			System.out.println("CategoryId: "+categoryId);
 			for (Expense exp : expenseList) {
@@ -91,7 +83,6 @@ public class ExpenseService {
 			JSONObject myResponse = new JSONObject(response);
 			String _id = myResponse.getString("_id");
 			Expense expense = new Expense(title, amount, userService.getUserId(), _id, foundCategory.getId());
-			// this.expenses.add(expense);
 			if(this.expenses.containsKey(foundCategory.getId())) {
 				this.expenses.get(foundCategory.getId()).add(expense);
 			}
@@ -141,7 +132,6 @@ public class ExpenseService {
 				String categoryId=obj.getString("categoryId");
 				Expense expense = new Expense(obj.getString("title"), obj.getInt("amount"), obj.getString("creator"),
 						obj.getString("_id"), obj.getString(categoryId));
-				//this.expenses.add(expense);
 				if(this.expenses.containsKey(obj.getString(categoryId))) {
 					this.expenses.get(categoryId).add(expense);
 				}
@@ -184,7 +174,7 @@ public class ExpenseService {
 		if (foundCategory == null) {
 			return false;
 		}
-		Expense foundExpense = findExpense(title, amount, foundCategory._id);
+		Expense foundExpense = findExpense(title, amount, foundCategory.getId());
 		String query_url = restURL + "/" + foundExpense.getId();
 		boolean result = true;
 		try {
@@ -215,7 +205,7 @@ public class ExpenseService {
 	public boolean deleteAllExpensesInCategory(String categoryTitle) {
 		Category foundCategory=categoryService.findCategory(categoryTitle);
 		String categoryId = foundCategory.getId();
-		String query_url = restURL + "/" + categoryId;
+		String query_url = restURL + "/" + categoryId+"/all";
 		boolean result = true;
 		try {
 			URL url = new URL(query_url);
