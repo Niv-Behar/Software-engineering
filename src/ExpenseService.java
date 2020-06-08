@@ -12,8 +12,8 @@ import org.json.JSONObject;
 
 public class ExpenseService {
 	List<Expense> expenses;
-//	private static final String restURL="http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/" + "api/expense";
-	private static final String restURL = "http://localhost:3000/api/expense";
+	private static final String restURL="http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/" + "api/expense";
+	// PRODUCTION: private static final String restURL = "http://localhost:3000/api/expense";
 	// Injection of services:
 	private final CategoryService categoryService = CategoryService.getInstance();
 	private final UserService userService = UserService.getInstance();
