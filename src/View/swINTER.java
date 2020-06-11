@@ -30,15 +30,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 public class swINTER extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JPasswordField passwordField;
-	private JTextField textEmailSignin;
-	private JPasswordField TextpasswordSignin;
-	private JPasswordField TextVerifyPasswordSignin;
+	private JTextField loginEmail;
+	private JPasswordField loginPassword;
+	private JTextField signupEmail;
+	private JPasswordField signupPassword;
 
 	/**
 	 * Launch the application.
@@ -77,64 +77,69 @@ public class swINTER extends JFrame {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 
-		JPanel logIn = new JPanel();
-		logIn.setBackground(new Color(165, 42, 42));
-		layeredPane.add(logIn, "name_1044684755738000");
-		logIn.setLayout(null);
+		JPanel loginPanel = new JPanel();
+		loginPanel.setBackground(Color.LIGHT_GRAY);
+		layeredPane.add(loginPanel, "name_1044684755738000");
+		loginPanel.setLayout(null);
 
-		JLabel lblNewLabel_12_1 = new JLabel("LogIn");
-		lblNewLabel_12_1.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel_12_1.setBounds(15, 16, 193, 44);
-		logIn.add(lblNewLabel_12_1);
+		JLabel lblNewLabel_12_1 = new JLabel("Login");
+		lblNewLabel_12_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_12_1.setFont(new Font("Tahoma", Font.BOLD, 28));
+		lblNewLabel_12_1.setBounds(15, 86, 444, 44);
+		loginPanel.add(lblNewLabel_12_1);
 
-		JLabel lblNewLabel_17 = new JLabel("new user?");
-		lblNewLabel_17.setBounds(292, 16, 81, 20);
-		logIn.add(lblNewLabel_17);
+		JLabel lblNewLabel_17 = new JLabel("Still not registered?");
+		lblNewLabel_17.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_17.setBounds(178, 16, 137, 20);
+		loginPanel.add(lblNewLabel_17);
 
-		JPanel signIn = new JPanel();
-		signIn.setBackground(new Color(165, 42, 42));
-		layeredPane.add(signIn, "name_1044689499709500");
-		signIn.setLayout(null);
+		JPanel signupPanel = new JPanel();
+		signupPanel.setBackground(Color.LIGHT_GRAY);
+		layeredPane.add(signupPanel, "name_1044689499709500");
+		signupPanel.setLayout(null);
 
-		JButton btnNewButton_9 = new JButton("sign in");
-		btnNewButton_9.addMouseListener(new MouseAdapter() {
+		JButton btnSwitchToSignup = new JButton("Sign Up");
+		btnSwitchToSignup.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				logIn.setVisible(false);
-				signIn.setVisible(true);
+				loginPanel.setVisible(false);
+				signupPanel.setVisible(true);
 			}
 		});
-		btnNewButton_9.setBounds(373, 16, 86, 20);
-		logIn.add(btnNewButton_9);
+		btnSwitchToSignup.setBounds(342, 16, 107, 20);
+		loginPanel.add(btnSwitchToSignup);
 
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(15, 101, 146, 26);
-		logIn.add(textField);
+		loginEmail = new JTextField();
+		loginEmail.setColumns(10);
+		loginEmail.setBounds(15, 172, 444, 44);
+		loginPanel.add(loginEmail);
 
-		JLabel lblNewLabel = new JLabel("user name:");
-		lblNewLabel.setBounds(15, 78, 113, 20);
-		logIn.add(lblNewLabel);
+		JLabel lblNewLabel = new JLabel("Email:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel.setBounds(15, 141, 444, 20);
+		loginPanel.add(lblNewLabel);
 
-		JLabel lblNewLabel_1 = new JLabel("password:");
-		lblNewLabel_1.setBounds(15, 150, 131, 20);
-		logIn.add(lblNewLabel_1);
+		JLabel lblNewLabel_1 = new JLabel("Password:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1.setBounds(15, 239, 444, 20);
+		loginPanel.add(lblNewLabel_1);
 
-		passwordField = new JPasswordField();
-		passwordField.setBounds(15, 175, 146, 26);
-		logIn.add(passwordField);
+		loginPassword = new JPasswordField();
+		loginPassword.setBounds(15, 270, 444, 44);
+		loginPanel.add(loginPassword);
 
 		JPanel choose_activity = new JPanel();
 		choose_activity.setBackground(new Color(165, 42, 42));
 		layeredPane.add(choose_activity, "name_1044691011849800");
 		choose_activity.setLayout(null);
 
-		JButton btnlogin = new JButton("log in");
-		btnlogin.addMouseListener(new MouseAdapter() {
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (userService.login(textField.getText(), passwordField.getText())) {
-					logIn.setVisible(false);
+				if (userService.login(loginEmail.getText(), loginPassword.getText())) {
+					loginPanel.setVisible(false);
 					choose_activity.setVisible(true);
 					JOptionPane.showMessageDialog(null, "login successfully!");
 				} else {
@@ -142,45 +147,41 @@ public class swINTER extends JFrame {
 				}
 			}
 		});
-		btnlogin.setBounds(344, 453, 115, 29);
-		logIn.add(btnlogin);
+		btnLogin.setBounds(72, 358, 312, 44);
+		loginPanel.add(btnLogin);
 
-		JLabel lblNewLabel_12 = new JLabel("SingIn");
-		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel_12.setBounds(15, 16, 193, 44);
-		signIn.add(lblNewLabel_12);
+		JLabel lblNewLabel_12 = new JLabel("Sign Up");
+		lblNewLabel_12.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 28));
+		lblNewLabel_12.setBounds(10, 79, 449, 44);
+		signupPanel.add(lblNewLabel_12);
 
-		JLabel lblNewLabel_13 = new JLabel("email:");
-		lblNewLabel_13.setBounds(15, 76, 69, 20);
-		signIn.add(lblNewLabel_13);
+		JLabel lblNewLabel_13 = new JLabel("Email:");
+		lblNewLabel_13.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_13.setBounds(10, 134, 454, 20);
+		signupPanel.add(lblNewLabel_13);
 
-		textEmailSignin = new JTextField();
-		textEmailSignin.setColumns(10);
-		textEmailSignin.setBounds(15, 102, 176, 26);
-		signIn.add(textEmailSignin);
+		signupEmail = new JTextField();
+		signupEmail.setColumns(10);
+		signupEmail.setBounds(10, 165, 449, 44);
+		signupPanel.add(signupEmail);
 
-		JLabel lblNewLabel_14 = new JLabel("password:");
-		lblNewLabel_14.setBounds(15, 144, 86, 20);
-		signIn.add(lblNewLabel_14);
+		JLabel lblNewLabel_14 = new JLabel("Password:");
+		lblNewLabel_14.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_14.setBounds(10, 226, 449, 20);
+		signupPanel.add(lblNewLabel_14);
 
-		TextpasswordSignin = new JPasswordField();
-		TextpasswordSignin.setBounds(15, 169, 176, 26);
-		signIn.add(TextpasswordSignin);
+		signupPassword = new JPasswordField();
+		signupPassword.setBounds(10, 257, 454, 44);
+		signupPanel.add(signupPassword);
 
-		JLabel lblNewLabel_15 = new JLabel("verify password:");
-		lblNewLabel_15.setBounds(15, 211, 123, 20);
-		signIn.add(lblNewLabel_15);
-
-		TextVerifyPasswordSignin = new JPasswordField();
-		TextVerifyPasswordSignin.setBounds(15, 236, 176, 26);
-		signIn.add(TextVerifyPasswordSignin);
-
-		JButton btnNewButton_7 = new JButton("sign in");
-		btnNewButton_7.addMouseListener(new MouseAdapter() {
+		JButton btnSignup = new JButton("Sign Up");
+		btnSignup.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnSignup.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (userService.signup(textEmailSignin.getText(), TextpasswordSignin.getText())) {
-					signIn.setVisible(false);
+				if (userService.signup(signupEmail.getText(), signupPassword.getText())) {
+					signupPanel.setVisible(false);
 					choose_activity.setVisible(true);
 					JOptionPane.showMessageDialog(null, "signin successfully!");
 
@@ -189,23 +190,24 @@ public class swINTER extends JFrame {
 				}
 			}
 		});
-		btnNewButton_7.setBounds(344, 453, 115, 29);
-		signIn.add(btnNewButton_7);
+		btnSignup.setBounds(116, 354, 237, 44);
+		signupPanel.add(btnSignup);
 
-		JButton btnNewButton_8 = new JButton("log in");
-		btnNewButton_8.addMouseListener(new MouseAdapter() {
+		JButton btnSwitchToLogin = new JButton("Login");
+		btnSwitchToLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				signIn.setVisible(false);
-				logIn.setVisible(true);
+				signupPanel.setVisible(false);
+				loginPanel.setVisible(true);
 			}
 		});
-		btnNewButton_8.setBounds(373, 16, 86, 20);
-		signIn.add(btnNewButton_8);
+		btnSwitchToLogin.setBounds(362, 16, 97, 20);
+		signupPanel.add(btnSwitchToLogin);
 
-		JLabel lblNewLabel_16 = new JLabel("user exist?");
-		lblNewLabel_16.setBounds(288, 16, 86, 20);
-		signIn.add(lblNewLabel_16);
+		JLabel lblNewLabel_16 = new JLabel("Already Signed ?");
+		lblNewLabel_16.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_16.setBounds(232, 16, 142, 20);
+		signupPanel.add(lblNewLabel_16);
 
 		JLabel lblNewLabel_2 = new JLabel("Choose activity");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -221,9 +223,9 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				choose_activity.setVisible(false);
-				textField.setText("");
-				passwordField.setText("");
-				logIn.setVisible(true);
+				loginEmail.setText("");
+				loginPassword.setText("");
+				loginPanel.setVisible(true);
 				JOptionPane.showMessageDialog(null, "logout successfully!");
 			}
 		});
