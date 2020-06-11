@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Controller.UserController;
 import Model.Category;
 import Model.CategoryService;
 import Model.Expense;
@@ -31,6 +32,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
 
 public class swINTER extends JFrame {
 
@@ -65,6 +68,8 @@ public class swINTER extends JFrame {
 		CategoryService categoryService = CategoryService.getInstance();
 		ExpenseService expenseService = ExpenseService.getInstance();
         //----------
+		UserController userController=new UserController();
+		//--------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 559);
 		contentPane = new JPanel();
@@ -128,25 +133,30 @@ public class swINTER extends JFrame {
 		loginPassword.setBounds(15, 270, 444, 44);
 		loginPanel.add(loginPassword);
 
-		JPanel choose_activity = new JPanel();
-		choose_activity.setBackground(new Color(165, 42, 42));
-		layeredPane.add(choose_activity, "name_1044691011849800");
-		choose_activity.setLayout(null);
+		JPanel homePanel = new JPanel();
+		homePanel.setBackground(Color.LIGHT_GRAY);
+		layeredPane.add(homePanel, "name_1044691011849800");
+		homePanel.setLayout(null);
 
 		JButton btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnLogin.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (userService.login(loginEmail.getText(), loginPassword.getText())) {
-					loginPanel.setVisible(false);
-					choose_activity.setVisible(true);
-					JOptionPane.showMessageDialog(null, "login successfully!");
-				} else {
-					JOptionPane.showMessageDialog(null, "login fail!");
-				}
-			}
+		//Login mouseClick!
+		btnLogin.addActionListener(mouseClicked->{
+			userController.login(loginEmail.getText(), loginPassword.getText(),loginPanel,homePanel);
+			
 		});
+//		btnLogin.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent arg0) {
+//				if (userService.login(loginEmail.getText(), loginPassword.getText())) {
+//					loginPanel.setVisible(false);
+//					choose_activity.setVisible(true);
+//					JOptionPane.showMessageDialog(null, "login successfully!");
+//				} else {
+//					JOptionPane.showMessageDialog(null, "login fail!");
+//				}
+//			}
+//		});
 		btnLogin.setBounds(72, 358, 312, 44);
 		loginPanel.add(btnLogin);
 
@@ -177,19 +187,23 @@ public class swINTER extends JFrame {
 
 		JButton btnSignup = new JButton("Sign Up");
 		btnSignup.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnSignup.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (userService.signup(signupEmail.getText(), signupPassword.getText())) {
-					signupPanel.setVisible(false);
-					choose_activity.setVisible(true);
-					JOptionPane.showMessageDialog(null, "signin successfully!");
-
-				} else {
-					JOptionPane.showMessageDialog(null, "signin fail! email already exist");
-				}
-			}
+		//Signup MouseClick:
+		btnSignup.addActionListener(mouseClicked->{
+			userController.signup(signupEmail.getText(), signupPassword.getText(), signupPanel,homePanel);
 		});
+//		btnSignup.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				if (userService.signup(signupEmail.getText(), signupPassword.getText())) {
+//					signupPanel.setVisible(false);
+//					homePanel.setVisible(true);
+//					JOptionPane.showMessageDialog(null, "signin successfully!");
+//
+//				} else {
+//					JOptionPane.showMessageDialog(null, "signin fail! email already exist");
+//				}
+//			}
+//		});
 		btnSignup.setBounds(116, 354, 237, 44);
 		signupPanel.add(btnSignup);
 
@@ -211,18 +225,14 @@ public class swINTER extends JFrame {
 
 		JLabel lblNewLabel_2 = new JLabel("Choose activity");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel_2.setBounds(21, 16, 212, 47);
-		choose_activity.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("welcome");
-		lblNewLabel_3.setBounds(216, 16, 122, 20);
-		choose_activity.add(lblNewLabel_3);
+		lblNewLabel_2.setBounds(118, 41, 212, 47);
+		homePanel.add(lblNewLabel_2);
 
 		JButton btnNewButton_3 = new JButton("log out");
 		btnNewButton_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				choose_activity.setVisible(false);
+				homePanel.setVisible(false);
 				loginEmail.setText("");
 				loginPassword.setText("");
 				loginPanel.setVisible(true);
@@ -230,25 +240,25 @@ public class swINTER extends JFrame {
 			}
 		});
 		btnNewButton_3.setBounds(368, 16, 83, 20);
-		choose_activity.add(btnNewButton_3);
+		homePanel.add(btnNewButton_3);
 
-		JPanel categories = new JPanel();
-		categories.setBackground(new Color(165, 42, 42));
-		layeredPane.add(categories, "name_1044692808216200");
+		JPanel categoryPanel = new JPanel();
+		categoryPanel.setBackground(new Color(165, 42, 42));
+		layeredPane.add(categoryPanel, "name_1044692808216200");
 
 		JButton btnNewButton = new JButton("categories");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				choose_activity.setVisible(false);
+				homePanel.setVisible(false);
 				categoryService.getCategories(userService.getToken());
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton.setForeground(Color.BLACK);
-		btnNewButton.setBackground(Color.WHITE);
-		btnNewButton.setBounds(66, 99, 142, 29);
-		choose_activity.add(btnNewButton);
+		btnNewButton.setBackground(UIManager.getColor("Button.background"));
+		btnNewButton.setBounds(10, 117, 142, 29);
+		homePanel.add(btnNewButton);
 
 		JPanel expense = new JPanel();
 		expense.setBackground(new Color(165, 42, 42));
@@ -259,12 +269,12 @@ public class swINTER extends JFrame {
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				choose_activity.setVisible(false);
+				homePanel.setVisible(false);
 				expense.setVisible(true);
 			}
 		});
-		btnNewButton_1.setBounds(66, 156, 142, 29);
-		choose_activity.add(btnNewButton_1);
+		btnNewButton_1.setBounds(162, 117, 142, 29);
+		homePanel.add(btnNewButton_1);
 
 		JPanel monthly_budget = new JPanel();
 		monthly_budget.setBackground(new Color(165, 42, 42));
@@ -272,21 +282,25 @@ public class swINTER extends JFrame {
 		monthly_budget.setLayout(null);
 
 		JButton btnNewButton_2 = new JButton("Monthly budget");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnNewButton_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				choose_activity.setVisible(false);
+				homePanel.setVisible(false);
 				monthly_budget.setVisible(true);
 			}
 		});
-		btnNewButton_2.setBounds(66, 213, 142, 29);
-		choose_activity.add(btnNewButton_2);
-		categories.setLayout(null);
+		btnNewButton_2.setBounds(314, 117, 142, 29);
+		homePanel.add(btnNewButton_2);
+		categoryPanel.setLayout(null);
 
 		JLabel lblNewLabel_4 = new JLabel("Categories:");
 		lblNewLabel_4.setBounds(15, 16, 177, 32);
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 26));
-		categories.add(lblNewLabel_4);
+		categoryPanel.add(lblNewLabel_4);
 
 		JPanel update_category = new JPanel();
 		update_category.setBackground(new Color(165, 42, 42));
@@ -297,12 +311,12 @@ public class swINTER extends JFrame {
 		btnNewButton_10.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				categories.setVisible(false);
+				categoryPanel.setVisible(false);
 				update_category.setVisible(true);
 			}
 		});
 		btnNewButton_10.setBounds(15, 77, 192, 29);
-		categories.add(btnNewButton_10);
+		categoryPanel.add(btnNewButton_10);
 
 		JPanel display_revenue = new JPanel();
 		display_revenue.setBackground(new Color(165, 42, 42));
@@ -313,12 +327,12 @@ public class swINTER extends JFrame {
 		btnNewButton_11.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				categories.setVisible(false);
+				categoryPanel.setVisible(false);
 				display_revenue.setVisible(true);
 			}
 		});
 		btnNewButton_11.setBounds(15, 122, 192, 29);
-		categories.add(btnNewButton_11);
+		categoryPanel.add(btnNewButton_11);
 
 		JPanel monthly_revenue = new JPanel();
 		monthly_revenue.setBackground(new Color(165, 42, 42));
@@ -329,24 +343,24 @@ public class swINTER extends JFrame {
 		btnNewButton_12.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				categories.setVisible(false);
+				categoryPanel.setVisible(false);
 				monthly_revenue.setVisible(true);
 			}
 		});
 		btnNewButton_12.setBounds(15, 167, 192, 29);
-		categories.add(btnNewButton_12);
+		categoryPanel.add(btnNewButton_12);
 
 		JLabel lblNewLabel_19_1 = new JLabel("for display revenue by category name,");
 		lblNewLabel_19_1.setBounds(15, 212, 287, 20);
-		categories.add(lblNewLabel_19_1);
+		categoryPanel.add(lblNewLabel_19_1);
 
 		JLabel lblNewLabel_18_1 = new JLabel("enter the category name and press 'display':");
 		lblNewLabel_18_1.setBounds(15, 232, 325, 20);
-		categories.add(lblNewLabel_18_1);
+		categoryPanel.add(lblNewLabel_18_1);
 
 		JFormattedTextField formattedTextField_1 = new JFormattedTextField();
 		formattedTextField_1.setBounds(15, 260, 177, 26);
-		categories.add(formattedTextField_1);
+		categoryPanel.add(formattedTextField_1);
 
 		JPanel revenue_by_name = new JPanel();
 		revenue_by_name.setBackground(new Color(165, 42, 42));
@@ -357,23 +371,23 @@ public class swINTER extends JFrame {
 		btnNewButton_17_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				categories.setVisible(false);
+				categoryPanel.setVisible(false);
 				revenue_by_name.setVisible(true);
 			}
 		});
 		btnNewButton_17_1.setBounds(207, 263, 81, 20);
-		categories.add(btnNewButton_17_1);
+		categoryPanel.add(btnNewButton_17_1);
 
 		JButton btnNewButton_4 = new JButton("back");
 		btnNewButton_4.setBounds(344, 453, 115, 29);
 		btnNewButton_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				categories.setVisible(false);
-				choose_activity.setVisible(true);
+				categoryPanel.setVisible(false);
+				homePanel.setVisible(true);
 			}
 		});
-		categories.add(btnNewButton_4);
+		categoryPanel.add(btnNewButton_4);
 
 		JPanel delete_caterogy = new JPanel();
 		delete_caterogy.setBackground(new Color(165, 42, 42));
@@ -384,12 +398,12 @@ public class swINTER extends JFrame {
 		btnNewButton_14.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				categories.setVisible(false);
+				categoryPanel.setVisible(false);
 				delete_caterogy.setVisible(true);
 			}
 		});
 		btnNewButton_14.setBounds(253, 122, 192, 29);
-		categories.add(btnNewButton_14);
+		categoryPanel.add(btnNewButton_14);
 
 		JPanel add_category = new JPanel();
 		add_category.setBackground(new Color(165, 42, 42));
@@ -412,12 +426,12 @@ public class swINTER extends JFrame {
 		btbAdd_Categoty.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				categories.setVisible(false);
+				categoryPanel.setVisible(false);
 				add_category.setVisible(true);
 			}
 		});
 		btbAdd_Categoty.setBounds(253, 77, 192, 29);
-		categories.add(btbAdd_Categoty);
+		categoryPanel.add(btbAdd_Categoty);
 
 		JLabel lblNewLabel_5 = new JLabel("Expense");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -558,7 +572,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				expense.setVisible(false);
-				choose_activity.setVisible(true);
+				homePanel.setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(344, 453, 115, 29);
@@ -597,7 +611,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				monthly_budget.setVisible(false);
-				choose_activity.setVisible(true);
+				homePanel.setVisible(true);
 			}
 		});
 		btnNewButton_6.setBounds(330, 439, 115, 29);
@@ -613,7 +627,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				update_category.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_1.setBounds(344, 453, 115, 29);
@@ -682,7 +696,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				add_category.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_2.setBounds(344, 453, 115, 29);
@@ -719,7 +733,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				display_revenue.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_2_1.setBounds(344, 453, 115, 29);
@@ -730,7 +744,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				delete_caterogy.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_2_2.setBounds(344, 453, 115, 29);
@@ -776,7 +790,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				monthly_revenue.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_2_1_1.setBounds(344, 453, 115, 29);
@@ -787,7 +801,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				revenue_by_name.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_2_1_2.setBounds(344, 453, 115, 29);
@@ -933,7 +947,7 @@ public class swINTER extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				display_expense.setVisible(false);
-				categories.setVisible(true);
+				categoryPanel.setVisible(true);
 			}
 		});
 		btnNewButton_4_2_1_2_2_1.setBounds(344, 453, 115, 29);
