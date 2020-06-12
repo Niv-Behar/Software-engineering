@@ -98,7 +98,7 @@ public class CategoryService {
     }
 
 
-    public boolean getCategories(String token) {
+    public boolean initCategories(String token) {
         String query_url = restURL;
         boolean result = true;
         try {

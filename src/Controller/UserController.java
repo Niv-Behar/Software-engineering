@@ -20,6 +20,8 @@ public class UserController {
 
 		} else {
 			JOptionPane.showMessageDialog(null, "login fail!");
+			
+			
 		}
 	}
 
@@ -37,6 +39,6 @@ public class UserController {
 	}
 
 	public void logout() {
-
+        
 	}
 }

@@ -12,7 +12,11 @@ public class UserService implements Authentication{
 	  private String token;
 	    private String userId;
 	    private static final String restURL = "http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/" + "api/user";
-
+	    //Injection of services:
+        private static final CategoryService categoryService=CategoryService.getInstance();
+        private static final ExpenseService expenseService=ExpenseService.getInstance();
+        //----------
+        
 	    //Singleton
 	    private final static UserService INSTANCE = new UserService();
 	    private UserService() {
@@ -59,6 +63,9 @@ public class UserService implements Authentication{
 	            JSONObject myResponse = new JSONObject(response);
 	            this.token = myResponse.getString("token");
 	            this.userId = myResponse.getString("userId");
+	            //Upon successfull login :
+	            categoryService.initCategories(token);
+	            expenseService.initExpenses(token);
 	            //Closing connection
 	            in.close();
 	            conn.disconnect();

@@ -109,7 +109,7 @@ public class ExpenseService {
 	}
 
 	// Fetching all expenses from a certain creator !
-	public boolean initExpenses() {
+	public boolean initExpenses(String token) {
 		String query_url = restURL;
 		boolean result = true;
 		try {
@@ -117,7 +117,7 @@ public class ExpenseService {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setConnectTimeout(5000);
 			// Setting header: for authorization
-			conn.setRequestProperty("Authorization", "Bearer " + userService.getToken());
+			conn.setRequestProperty("Authorization", "Bearer " + token);
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
@@ -134,8 +134,8 @@ public class ExpenseService {
 				JSONObject obj = expJSONS.getJSONObject(i);
 				String categoryId=obj.getString("categoryId");
 				Expense expense = new Expense(obj.getString("title"), obj.getInt("amount"), obj.getString("creator"),
-						obj.getString("_id"), obj.getString(categoryId));
-				if(this.expenses.containsKey(obj.getString(categoryId))) {
+						obj.getString("_id"), categoryId);
+				if(this.expenses.containsKey(categoryId)) {
 					this.expenses.get(categoryId).add(expense);
 				}
 				else {
@@ -149,7 +149,7 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Authentication failed");
+			System.out.println("Authentication failed in initExpenses");
 			result = false;
 		}
 		return result;
