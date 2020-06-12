@@ -51,6 +51,7 @@ import java.awt.Checkbox;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
 import javax.swing.JTextArea;
+import java.awt.TextArea;
 
 public class swINTER extends JFrame {
 	
@@ -179,7 +180,7 @@ public class swINTER extends JFrame {
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		//Login mouseClick!
 		btnLogin.addActionListener(mouseClicked->{
-			userController.login(loginEmail.getText(), loginPassword.getText(),loginPanel,homePanel);
+			userController.login(loginEmail.getText(), loginPassword.getText(),loginPanel,homePanel,monthlySettingsPanel);
 			
 		});
 		loginPanel.add(btnLogin);
@@ -217,7 +218,7 @@ public class swINTER extends JFrame {
 		btnSignup.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		//Signup MouseClick:
 		btnSignup.addActionListener(mouseClicked->{
-			userController.signup(signupEmail.getText(), signupPassword.getText(), signupPanel,homePanel);
+			userController.signup(signupEmail.getText(), signupPassword.getText(), signupPanel,homePanel,monthlySettingsPanel);
 		});
 		signupPanel.add(btnSignup);
 
@@ -1065,43 +1066,46 @@ public class swINTER extends JFrame {
 		monthly_expense.add(btnNewButton_4_2_1_2_2_2_1);
 
 		monthlySettingsPanel = new JPanel();
+		monthlySettingsPanel.setForeground(Color.LIGHT_GRAY);
 		monthlySettingsPanel.setBackground(Color.LIGHT_GRAY);
 		layeredPane.add(monthlySettingsPanel, "name_1062105994166900");
 
 		JLabel monthlySettingsTitle = new JLabel("Monthly Configurations");
-		monthlySettingsTitle.setBounds(10, 46, 676, 86);
+		monthlySettingsTitle.setBounds(10, 11, 676, 86);
 		monthlySettingsTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		monthlySettingsTitle.setFont(new Font("Tahoma", Font.BOLD, 40));
 		
 		JLabel revenueLabel = new JLabel("Insert Monthly Revenue:");
 		revenueLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		revenueLabel.setBounds(10, 143, 308, 26);
+		revenueLabel.setBounds(10, 108, 308, 26);
 		
 		JLabel createCategoriesLabel = new JLabel("Create Categories:");
 		createCategoriesLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		createCategoriesLabel.setBounds(10, 343, 308, 37);
+		createCategoriesLabel.setBounds(10, 292, 308, 37);
 		
 		JLabel saveOptionLabel = new JLabel("Insert Monthly Saving Preference:");
 		saveOptionLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		saveOptionLabel.setBounds(10, 234, 308, 43);
+		saveOptionLabel.setBounds(10, 199, 308, 43);
 		
 		inputRevenue = new JTextField();
-		inputRevenue.setBounds(10, 180, 308, 43);
+		inputRevenue.setBounds(10, 145, 308, 43);
 		inputRevenue.setColumns(10);
 		
 		inputMonthlySaving = new JTextField();
-		inputMonthlySaving.setBounds(10, 275, 308, 45);
+		inputMonthlySaving.setBounds(10, 240, 308, 45);
 		inputMonthlySaving.setColumns(10);
 		
 		JRadioButton rdbtnPrecents = new JRadioButton("ILS");
+		rdbtnPrecents.setSelected(true);
 		rdbtnPrecents.setBackground(Color.LIGHT_GRAY);
 		buttonGroup.add(rdbtnPrecents);
-		rdbtnPrecents.setBounds(324, 297, 49, 23);
+		rdbtnPrecents.setBounds(324, 262, 49, 23);
 		
 		JRadioButton rdbtnMoney = new JRadioButton("%");
+		rdbtnMoney.setSelected(true);
 		rdbtnMoney.setBackground(Color.LIGHT_GRAY);
 		buttonGroup.add(rdbtnMoney);
-		rdbtnMoney.setBounds(324, 275, 48, 23);
+		rdbtnMoney.setBounds(324, 239, 48, 23);
 		
 		monthlySettingsPanel.setLayout(null);
 		monthlySettingsPanel.add(monthlySettingsTitle);
@@ -1115,17 +1119,38 @@ public class swINTER extends JFrame {
 		
 		JLabel previewLabel = new JLabel("Preview:");
 		previewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		previewLabel.setBounds(378, 140, 308, 29);
+		previewLabel.setBounds(378, 140, 82, 29);
 		monthlySettingsPanel.add(previewLabel);
-		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(679, 180, -296, 329);
-		monthlySettingsPanel.add(textArea);
+	
 		
 		JButton btnSwitchToAddCategory = new JButton("Add Category");
 		btnSwitchToAddCategory.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnSwitchToAddCategory.setBounds(10, 388, 308, 37);
+		btnSwitchToAddCategory.setBounds(10, 340, 308, 37);
 		monthlySettingsPanel.add(btnSwitchToAddCategory);
+		
+		JButton btnSubmitConfigurations = new JButton("Submit Configurations");
+		btnSubmitConfigurations.setForeground(Color.PINK);
+		btnSubmitConfigurations.setFont(new Font("Tahoma", Font.BOLD, 24));
+		btnSubmitConfigurations.setBounds(17, 419, 301, 65);
+		monthlySettingsPanel.add(btnSubmitConfigurations);
+		
+		TextArea previewArea = new TextArea();
+		previewArea.setBounds(378, 175, 308, 335);
+		monthlySettingsPanel.add(previewArea);
+		previewArea.setText("this is my preview");
+		
+		JButton btnLoadPreview = new JButton("Load Preview");
+		btnLoadPreview.setForeground(UIManager.getColor("ToolBar.dockingForeground"));
+		btnLoadPreview.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnLoadPreview.setBounds(459, 145, 144, 23);
+		monthlySettingsPanel.add(btnLoadPreview);
+		btnLoadPreview.addActionListener(mouseClicked->{
+			//TODO 
+			//LOAD PREVIEW !
+		});
+		
+		
+		
 		btnSwitchToAddCategory.addActionListener(mouseClicked->{
 			UtilitiesController.swapPages(monthlySettingsPanel, addCategoryPanel);
 		});
