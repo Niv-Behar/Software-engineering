@@ -20,11 +20,9 @@ public class ConfigService {
 	private boolean configStatus;
 	private String _id;
 
-	// private static final String restURL =
-	// "http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/"+
-	// "api/config";
+	 private static final String restURL ="http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/"+"api/config";
 	// PRODUCTION:
-	private static final String restURL = "http://localhost:3000/api/config";
+//	private static final String restURL = "http://localhost:3000/api/config";
 
 	// Singleton:
 	private static ConfigService INSTANCE = new ConfigService();

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 public class CategoryService {
     private static final String restURL = "http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/" + "api/category";
     List<Category> categories;
+    
 
     //Singleton
     private CategoryService() {
@@ -201,7 +202,8 @@ public class CategoryService {
              InputStream in = new BufferedInputStream(conn.getInputStream());
              String response = IOUtils.toString(in, "UTF-8");
              this.categories.removeIf(cat->{
-                 return cat._id.equals(_id);
+            	 return cat._id.equals(_id);
+               
              });
 
              //Closing connection
