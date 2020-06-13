@@ -31,6 +31,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JFormattedTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Observable;
+import java.util.Observer;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
@@ -69,6 +71,12 @@ public class swINTER extends JFrame {
 	private JTextField inputWantedSaving;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JPanel addCategoryPanel;
+	
+	
+	//Labels:
+	private JLabel userMonthlyRevenue=new JLabel("");//Going to Display the updated userMonthlyRevenue
+	private JLabel userWantedSaveAmount=new JLabel("");//Going to Dispaly the updated userWantedSaveAmount
+	
 
 	/**
 	 * Launch the application.
@@ -90,15 +98,19 @@ public class swINTER extends JFrame {
 	 * Create the frame.
 	 */
 	public swINTER() {
-		setBackground(Color.ORANGE);
-		setForeground(Color.LIGHT_GRAY);
+		
 		setTitle("Money Saver");
 		// Creating the Services:
 		UserService userService = UserService.getInstance();
 		CategoryService categoryService = CategoryService.getInstance();
 		ExpenseService expenseService = ExpenseService.getInstance();
 		// ----------
+		//Creating my Observers:
+		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount);
+		//-----------
 		UserController userController = new UserController();
+		//Adding the Observer to the userController which is also an observable!
+		userController.addObserver(configObserver);
 		CategoryController categoryController = new CategoryController();
 		// --------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -238,7 +250,7 @@ public class swINTER extends JFrame {
 		JLabel homePanelTitle = new JLabel("Ongoing Operations");
 		homePanelTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		homePanelTitle.setFont(new Font("Tahoma", Font.BOLD, 40));
-		homePanelTitle.setBounds(10, 40, 676, 75);
+		homePanelTitle.setBounds(-126, 0, 676, 75);
 		homePanel.add(homePanelTitle);
 
 		JButton btnLogout = new JButton("Logout");
@@ -309,28 +321,19 @@ public class swINTER extends JFrame {
 		homePanel.add(btnNewButton_2);
 
 		JButton btnAddCategory = new JButton("Add Category");
-		btnAddCategory.addActionListener(mouseClicked -> {
-			userController.logout(addCategoryPanel,loginPanel);
-		});
 		btnAddCategory.setBounds(10, 431, 142, 29);
 		homePanel.add(btnAddCategory);
 
-		JLabel lblTEST = new JLabel("");
-		lblTEST.setBounds(391, 192, 255, 66);
-		homePanel.add(lblTEST);
-		lblTEST.setText("Some Random Text !");
-
-		JButton btnTEST = new JButton("Change text");
-		btnTEST.setBounds(470, 252, 109, 39);
-		homePanel.add(btnTEST);
-		btnTEST.addActionListener(mouseClicked -> {
-			String testing = lblTEST.getText();
-			if (testing.equalsIgnoreCase("Shoshi is zona")) {
-				lblTEST.setText("Some random text !");
-			} else {
-				lblTEST.setText("Shoshi is Zona");
-			}
-		});
+		//userMonthlyRevenue = new JLabel("asd");
+		userMonthlyRevenue.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		userMonthlyRevenue.setBounds(10, 73, 255, 39);
+		homePanel.add(userMonthlyRevenue);
+		
+	//	userWantedSaveAmount = new JLabel("asda");
+		userWantedSaveAmount.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		userWantedSaveAmount.setBounds(10, 119, 255, 39);
+		homePanel.add(userWantedSaveAmount);
+		
 
 		categoryPanel.setLayout(null);
 

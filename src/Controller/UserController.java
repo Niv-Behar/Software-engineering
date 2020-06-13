@@ -1,5 +1,7 @@
 package Controller;
 
+import java.util.Observable;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -9,7 +11,7 @@ import javax.swing.JTextField;
 import Model.ConfigService;
 import Model.UserService;
 
-public class UserController {
+public class UserController extends Observable{
 
 	// Injection of services:
 	UserService userService = UserService.getInstance();
@@ -23,9 +25,13 @@ public class UserController {
 		}
 		if (userService.login(email, password)) {
 			// Upon success:
-	
-			
 			configService.fetchConfig(userService.getToken());
+			//Triggering the Observers that are listening to that Observable !
+		    this.setChanged();
+		    this.notifyObservers();
+		    //--------------------------------
+		    
+		    
 			if(configService.getConfigStatus()) {
 				UtilitiesController.swapPages(currentPanel, nextPanel);
 			}else {
@@ -49,9 +55,7 @@ public class UserController {
 			userService.login(email, password);
 			System.out.println(userService.getUserId());
 			configService.createConfig(userService.getUserId(), userService.getToken());
-		   
-			
-			configService.fetchConfig(userService.getToken());
+		    configService.fetchConfig(userService.getToken());
 			if(configService.getConfigStatus()) {
 				  UtilitiesController.swapPages(currentPanel, nextPanel);
 			}else {
