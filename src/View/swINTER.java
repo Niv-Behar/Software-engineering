@@ -54,6 +54,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.JTextArea;
 import java.awt.TextArea;
+import javax.swing.JTable;
 
 public class swINTER extends JFrame {
 
@@ -137,14 +138,11 @@ public class swINTER extends JFrame {
 		btnSwitchToSignup.setForeground(Color.RED);
 		btnSwitchToSignup.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnSwitchToSignup.setBounds(553, 16, 133, 32);
-		btnSwitchToSignup.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				loginPanel.setVisible(false);
-				signupPanel.setVisible(true);
-			}
-		});
 		loginPanel.add(btnSwitchToSignup);
+		// Swap pages - login to signup
+		btnSwitchToSignup.addActionListener(mouseClicked -> {
+			UtilitiesController.swapPages(loginPanel, signupPanel);
+		});
 
 		loginEmail = new JTextField();
 		loginEmail.setBounds(10, 227, 671, 44);
@@ -175,13 +173,13 @@ public class swINTER extends JFrame {
 		btnLogin.setForeground(UIManager.getColor("ToolBar.dockingForeground"));
 		btnLogin.setBounds(15, 387, 671, 62);
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		// Login mouseClick!
+		loginPanel.add(btnLogin);
+		// Login
 		btnLogin.addActionListener(mouseClicked -> {
 			userController.login(loginEmail.getText(), loginPassword.getText(), loginPanel, homePanel,
 					monthlySettingsPanel);
-
 		});
-		loginPanel.add(btnLogin);
+
 		signupPanel.setLayout(null);
 
 		JLabel lblNewLabel_12 = new JLabel("Sign Up");
@@ -214,25 +212,22 @@ public class swINTER extends JFrame {
 		btnSignup.setForeground(UIManager.getColor("ToolBar.dockingForeground"));
 		btnSignup.setBounds(10, 399, 676, 56);
 		btnSignup.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		signupPanel.add(btnSignup);
 		// Signup MouseClick:
 		btnSignup.addActionListener(mouseClicked -> {
 			userController.signup(signupEmail.getText(), signupPassword.getText(), signupPanel, homePanel,
 					monthlySettingsPanel);
 		});
-		signupPanel.add(btnSignup);
 
 		JButton btnSwitchToLogin = new JButton("Login");
 		btnSwitchToLogin.setForeground(Color.RED);
 		btnSwitchToLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnSwitchToLogin.setBounds(558, 18, 128, 36);
-		btnSwitchToLogin.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				signupPanel.setVisible(false);
-				loginPanel.setVisible(true);
-			}
-		});
 		signupPanel.add(btnSwitchToLogin);
+		// Swap from signup to login panel
+		btnSwitchToLogin.addActionListener(mouseClicked -> {
+			UtilitiesController.swapPages(signupPanel, loginPanel);
+		});
 
 		JLabel lblNewLabel_16 = new JLabel("Already Signed ?");
 		lblNewLabel_16.setForeground(Color.RED);
@@ -249,20 +244,16 @@ public class swINTER extends JFrame {
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnLogout.setForeground(Color.RED);
-
-		btnLogout.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				homePanel.setVisible(false);
-				loginEmail.setText("");
-				loginPassword.setText("");
-				loginPanel.setVisible(true);
-				JOptionPane.showMessageDialog(null, "logout successfully!");
-			}
-		});
 		btnLogout.setBounds(577, 11, 109, 39);
-
 		homePanel.add(btnLogout);
+		//Logout from homePanel!
+		btnLogout.addActionListener(mouseClicked->{
+			userController.logout(homePanel,loginPanel,loginEmail,loginPassword);
+//			loginEmail.setText("");
+//			loginPassword.setText("");
+//			UtilitiesController.swapPages(homePanel, loginPanel);
+		});
+
 
 		JPanel categoryPanel = new JPanel();
 		categoryPanel.setBackground(Color.LIGHT_GRAY);
@@ -319,10 +310,28 @@ public class swINTER extends JFrame {
 
 		JButton btnAddCategory = new JButton("Add Category");
 		btnAddCategory.addActionListener(mouseClicked -> {
-			userController.logout();
+			userController.logout(addCategoryPanel,loginPanel);
 		});
 		btnAddCategory.setBounds(10, 431, 142, 29);
 		homePanel.add(btnAddCategory);
+
+		JLabel lblTEST = new JLabel("");
+		lblTEST.setBounds(391, 192, 255, 66);
+		homePanel.add(lblTEST);
+		lblTEST.setText("Some Random Text !");
+
+		JButton btnTEST = new JButton("Change text");
+		btnTEST.setBounds(470, 252, 109, 39);
+		homePanel.add(btnTEST);
+		btnTEST.addActionListener(mouseClicked -> {
+			String testing = lblTEST.getText();
+			if (testing.equalsIgnoreCase("Shoshi is zona")) {
+				lblTEST.setText("Some random text !");
+			} else {
+				lblTEST.setText("Shoshi is Zona");
+			}
+		});
+
 		categoryPanel.setLayout(null);
 
 		JLabel lblNewLabel_4 = new JLabel("Categories:");

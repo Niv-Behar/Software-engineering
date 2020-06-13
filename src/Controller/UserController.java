@@ -2,7 +2,9 @@ package Controller;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import Model.ConfigService;
 import Model.UserService;
@@ -61,8 +63,16 @@ public class UserController {
 		}
 	}
 
-	public void logout() {
+	public void logout(JPanel currentPanel,JPanel nextPanel,JTextField email,JPasswordField password) {
+		
+		email.setText("");
+		password.setText("");
+		UtilitiesController.swapPages(currentPanel, nextPanel);
          userService.logout();
+	}
+	public void logout(JPanel currentPanel,JPanel nextPanel) {
+		UtilitiesController.swapPages(currentPanel, nextPanel);
+		userService.logout();
 	}
 	
 	public void submitConfiguration(String monthlyRevenue,String wantedSaving,JRadioButton precents,
