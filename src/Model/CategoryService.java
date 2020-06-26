@@ -28,12 +28,18 @@ public class CategoryService {
     }
     //Singleton
     
-    public void printCategories() {
-    	System.out.println("Printing categories:");
+    
+    
+    public String toString() {
+    	StringBuilder builder=new StringBuilder();
     	this.categories.forEach(category->{
-    		System.out.println(category);
+    		builder.append(category.toString());
+    		builder.append('\n');
+    		
     	});
+    	return builder.toString();
     }
+
     
     public Category findCategory(String title) {
     	Category result=null;
@@ -55,12 +61,9 @@ public class CategoryService {
     		}
     	}
     	if(alreadyExists==true) {
-    		System.out.println("Category already exists!");
     		return false;
     	}
-    	//Check ends here
-    	
-    	
+    	    	
         String query_url = restURL;
         String json = "{ \"title\":\"" + title + "\",\"amount\":\"" + amount + "\",\"amountUsed\":\"" + amountUsed + "\" }";
         boolean result = true;
@@ -91,7 +94,7 @@ public class CategoryService {
             conn.disconnect();
         } catch (Exception e) {
             //In case of unsuccessful response with status of other then 200/201....
-            System.out.println("Authentication failed");
+            
             result = false;
         }
         return result;
@@ -131,7 +134,6 @@ public class CategoryService {
             conn.disconnect();
         } catch (Exception e) {
             //In case of unsuccessful response with status of other then 200/201....
-            System.out.println("Authentication failed");
             result = false;
         }
         return result;
@@ -147,10 +149,8 @@ public class CategoryService {
     		}
     	}
     	if(!alreadyExists==true) {
-    		System.out.println("Category doesnt exists!");
     		return false;
     	}
-    	////////////////////////
     	
         String query_url = restURL;
         boolean result = true;
@@ -171,7 +171,6 @@ public class CategoryService {
             OutputStream os = conn.getOutputStream();
             os.write(json.getBytes("UTF-8"));
             os.close();
-            System.out.println("passed until response");
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String response = IOUtils.toString(in, "UTF-8");
@@ -179,7 +178,6 @@ public class CategoryService {
             conn.disconnect();
         } catch (Exception e) {
             //In case of unsuccessful response with status of other then 200/201....
-            System.out.println("Authentication failed");
             result = false;
         }
         return result;
@@ -210,7 +208,6 @@ public class CategoryService {
              conn.disconnect();
          } catch (Exception e) {
              //In case of unsuccessful response with status of other then 200/201....
-             System.out.println("Error");
              result = false;
          }
          return result;

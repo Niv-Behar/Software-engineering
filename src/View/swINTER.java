@@ -57,9 +57,13 @@ import javax.swing.ButtonModel;
 import javax.swing.JTextArea;
 import java.awt.TextArea;
 import javax.swing.JTable;
+import javax.swing.DropMode;
 
 public class swINTER extends JFrame {
-
+    //Controllers:
+	private UserController userController = new UserController();
+	private CategoryController categoryController = new CategoryController();
+	
 	private JTextField loginEmail;
 	private JPasswordField loginPassword;
 
@@ -74,8 +78,10 @@ public class swINTER extends JFrame {
 	
 	
 	//Labels:
-	private JLabel userMonthlyRevenue=new JLabel("");//Going to Display the updated userMonthlyRevenue
-	private JLabel userWantedSaveAmount=new JLabel("");//Going to Dispaly the updated userWantedSaveAmount
+	private JLabel userMonthlyRevenue=new JLabel("userMonthlyRevenue");//Going to Display the updated userMonthlyRevenue
+	private JLabel userWantedSaveAmount=new JLabel("userWantedSaveAmount");//Going to Display the updated userWantedSaveAmount
+	private JLabel userTotalSaved=new JLabel("userTotalSaved");//Going to Display the total saved so far amount
+	private TextArea previewArea=new TextArea("previewArea");//Going to Display the preview of the categories
 	
 
 	/**
@@ -98,7 +104,6 @@ public class swINTER extends JFrame {
 	 * Create the frame.
 	 */
 	public swINTER() {
-		
 		setTitle("Money Saver");
 		// Creating the Services:
 		UserService userService = UserService.getInstance();
@@ -106,12 +111,15 @@ public class swINTER extends JFrame {
 		ExpenseService expenseService = ExpenseService.getInstance();
 		// ----------
 		//Creating my Observers:
-		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount);
+		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount,this.userTotalSaved);
+		CategoryObserver categoryObserver=new CategoryObserver(this.previewArea);
 		//-----------
-		UserController userController = new UserController();
-		//Adding the Observer to the userController which is also an observable!
+		//Adding Observer to Observable:
 		userController.addObserver(configObserver);
-		CategoryController categoryController = new CategoryController();
+		userController.addObserver(categoryObserver);
+		categoryController.addObserver(categoryObserver);
+		
+		
 		// --------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 559);
@@ -271,18 +279,16 @@ public class swINTER extends JFrame {
 		categoryPanel.setBackground(Color.LIGHT_GRAY);
 		layeredPane.add(categoryPanel, "name_1044692808216200");
 
-		JButton btnShowCategories = new JButton("Show Categories");
-		btnShowCategories.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				homePanel.setVisible(false);
-				monthlySettingsPanel.setVisible(true);
-			}
+		JButton btnEditMonthlyConfig = new JButton("Edit Monthly Settings");
+		btnEditMonthlyConfig.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        //Page swap	
+		btnEditMonthlyConfig.addActionListener(mouseClicked->{
+			UtilitiesController.swapPages(homePanel, monthlySettingsPanel);
 		});
-		btnShowCategories.setForeground(Color.BLACK);
-		btnShowCategories.setBackground(UIManager.getColor("Button.background"));
-		btnShowCategories.setBounds(10, 391, 142, 29);
-		homePanel.add(btnShowCategories);
+		btnEditMonthlyConfig.setForeground(Color.BLUE);
+		btnEditMonthlyConfig.setBackground(UIManager.getColor("Button.background"));
+		btnEditMonthlyConfig.setBounds(419, 104, 267, 46);
+		homePanel.add(btnEditMonthlyConfig);
 
 		JPanel expense = new JPanel();
 		expense.setBackground(Color.LIGHT_GRAY);
@@ -333,6 +339,11 @@ public class swINTER extends JFrame {
 		userWantedSaveAmount.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		userWantedSaveAmount.setBounds(10, 119, 255, 39);
 		homePanel.add(userWantedSaveAmount);
+		
+		//userTotalSaved = new JLabel("userTotalSaved");
+		userTotalSaved.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		userTotalSaved.setBounds(10, 169, 255, 39);
+		homePanel.add(userTotalSaved);
 		
 
 		categoryPanel.setLayout(null);
@@ -460,7 +471,7 @@ public class swINTER extends JFrame {
 		addCategoryPanel.add(addCategoryTitle);
 
 		JTextPane addCategoryAmount = new JTextPane();
-		addCategoryAmount.setBounds(10, 219, 676, 43);
+		addCategoryAmount.setBounds(10, 201, 676, 43);
 		addCategoryPanel.add(addCategoryAmount);
 
 		JButton btbAdd_Categoty = new JButton("add category");
@@ -711,26 +722,7 @@ public class swINTER extends JFrame {
 		lblNewLabel_11.setBounds(15, 170, 264, 20);
 		update_category.add(lblNewLabel_11);
 
-		JButton btnNewButton_15 = new JButton("update");
-		btnNewButton_15.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Category updateCat = categoryService.findCategory(textUpdateCat.getText());
-				if (!textUpCatName.getText().equalsIgnoreCase("")) {
-					updateCat.setTitle(textUpCatName.getText());
-				}
-				if (!textUpCatAmount.getText().equalsIgnoreCase("")) {
-					updateCat.setAmount(Integer.parseInt(textUpCatAmount.getText()));
-				}
-				if (!textUpCatAmountUsed.getText().equalsIgnoreCase("")) {
-					updateCat.amountUsed = Integer.parseInt(textUpCatAmountUsed.getText());
-				}
-				categoryService.updateCategory(updateCat, userService.getToken());
-				categoryService.printCategories();
-			}
-		});
-		btnNewButton_15.setBounds(214, 453, 115, 29);
-		update_category.add(btnNewButton_15);
+		
 
 		JButton btnBackAddCategoryPanel = new JButton("Back");
 		btnBackAddCategoryPanel.setForeground(Color.RED);
@@ -742,22 +734,37 @@ public class swINTER extends JFrame {
 			UtilitiesController.swapPages(addCategoryPanel, monthlySettingsPanel);
 		});
 
-		JLabel addCategoryLabel = new JLabel("Add Category:");
-		addCategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		addCategoryLabel.setFont(new Font("Tahoma", Font.BOLD, 40));
-		addCategoryLabel.setBounds(10, 16, 676, 49);
-		addCategoryPanel.add(addCategoryLabel);
+		JLabel editCategoryLabel = new JLabel("Edit Category:");
+		editCategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		editCategoryLabel.setFont(new Font("Tahoma", Font.BOLD, 40));
+		editCategoryLabel.setBounds(10, 16, 676, 49);
+		addCategoryPanel.add(editCategoryLabel);
 
 		JLabel addCategoyPanelAmountLabel = new JLabel("Amount:");
 		addCategoyPanelAmountLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		addCategoyPanelAmountLabel.setBounds(10, 182, 676, 26);
+		addCategoyPanelAmountLabel.setBounds(10, 164, 676, 26);
 		addCategoryPanel.add(addCategoyPanelAmountLabel);
 
 		JButton btnAddCategoryPanel = new JButton("ADD");
 		btnAddCategoryPanel.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		btnAddCategoryPanel.setForeground(UIManager.getColor("ToolBar.dockingForeground"));
-		btnAddCategoryPanel.setBounds(10, 319, 676, 56);
+		btnAddCategoryPanel.setBounds(10, 266, 676, 56);
 		addCategoryPanel.add(btnAddCategoryPanel);
+		
+		JButton btnRemoveCategory = new JButton("Remove");
+		btnRemoveCategory.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnRemoveCategory.setBounds(10, 357, 236, 58);
+		addCategoryPanel.add(btnRemoveCategory);
+		btnRemoveCategory.addActionListener(mouseClicked->{
+			categoryController.deleteCategory(addCategoryTitle.getText(), addCategoryPanel, monthlySettingsPanel);
+		});
+		
+		JTextArea txtrRemovesTheCategory = new JTextArea();
+		txtrRemovesTheCategory.setTabSize(2);
+		txtrRemovesTheCategory.setRows(3);
+		txtrRemovesTheCategory.setText("Removes the category\r\nwith the choosen title \r\nand deletes all the expenses \r\nrelated to that category!");
+		txtrRemovesTheCategory.setBounds(10, 417, 236, 76);
+		addCategoryPanel.add(txtrRemovesTheCategory);
 		btnAddCategoryPanel.addActionListener(mouseClicked -> {
 			// Setting Listener to addCategoryBtn
 			categoryController.addCategory(addCategoryTitle.getText(), addCategoryAmount.getText(), addCategoryPanel,
@@ -811,25 +818,7 @@ public class swINTER extends JFrame {
 		inputDeleteCategory.setBounds(23, 109, 424, 47);
 		delete_caterogy.add(inputDeleteCategory);
 
-		JButton btnDeleteCategory = new JButton("DELETE");
-		btnDeleteCategory.setForeground(Color.BLACK);
-		btnDeleteCategory.setBackground(Color.ORANGE);
-		btnDeleteCategory.setFont(new Font("Verdana", Font.PLAIN, 20));
-		btnDeleteCategory.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Category deletedCat = categoryService.findCategory(inputDeleteCategory.getText());
-				if (deletedCat != null) {
-					categoryService.deleteCategory(deletedCat.getId(), userService.getToken());
-					categoryService.printCategories();
-				} else {
-					// TODO
-					// ERROR IF deletedCat doesn't exists!
-				}
-			}
-		});
-		btnDeleteCategory.setBounds(25, 205, 422, 47);
-		delete_caterogy.add(btnDeleteCategory);
+	
 
 		TextField textField = new TextField();
 		textField.setBounds(28, 288, 408, 159);
@@ -917,23 +906,6 @@ public class swINTER extends JFrame {
 		textUpExChooseCat.setBounds(15, 89, 144, 26);
 		update_expense.add(textUpExChooseCat);
 
-		JButton btnNewButton_19 = new JButton("update");
-		btnNewButton_19.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Expense updateExpense = expenseService.findExpense(textUpExChooseExpense.getText(), 0,
-						textUpExChooseCat.getText()); // amount 0, cat_id
-				if (!textUpExpenseName.getText().equalsIgnoreCase("")) {
-					updateExpense.setTitle(textUpExpenseName.getText());
-				}
-				if (!textUpExpenseAmount.getText().equalsIgnoreCase("")) {
-					updateExpense.setAmount(Integer.parseInt(textUpExpenseAmount.getText()));
-				}
-				expenseService.printExpensesByCategory();
-			}
-		});
-		btnNewButton_19.setBounds(214, 453, 115, 29);
-		update_expense.add(btnNewButton_19);
 
 		JLabel lblNewLabel_10_4_1 = new JLabel("choose category");
 		lblNewLabel_10_4_1.setBounds(15, 64, 127, 20);
@@ -975,18 +947,7 @@ public class swINTER extends JFrame {
 		textAddExpenseCatName.setBounds(15, 234, 187, 26);
 		add_expense.add(textAddExpenseCatName);
 
-		JButton btnAdd_1 = new JButton("add");
-		btnAdd_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				expenseService.addExpenseToCategory(textAddExpenseTitle.getText(),
-						Integer.parseInt(textAddExpenseAmount.getText()), textAddExpenseCatName.getText());
-				expenseService.printExpensesByCategory();
-			}
-		});
-		btnAdd_1.setBounds(210, 453, 115, 29);
-		add_expense.add(btnAdd_1);
-
+		
 		JLabel lblNewLabel_8_1_1 = new JLabel("category name");
 		lblNewLabel_8_1_1.setBounds(15, 210, 127, 20);
 		add_expense.add(lblNewLabel_8_1_1);
@@ -1039,23 +1000,7 @@ public class swINTER extends JFrame {
 		textDeleteExName.setBounds(15, 152, 149, 26);
 		delete_expense.add(textDeleteExName);
 
-		JButton btnNewButton_20 = new JButton("delete");
-		btnNewButton_20.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Expense deleteEx = expenseService.findExpense(textDeleteExName.getText(), 0,
-						textDeleteCatName.getText()); // amount 0, cat_id
-				if (deleteEx != null) {
-					expenseService.deleteExpense(deleteEx.getTitle(), 0, textDeleteCatName.getText());
-					expenseService.printExpensesByCategory();
-				} else {
-					// TODO
-					// ERROR IF deleteEX DOESN'T EXISTS!
-				}
-			}
-		});
-		btnNewButton_20.setBounds(214, 453, 115, 29);
-		delete_expense.add(btnNewButton_20);
+	
 
 		JLabel monthly_revenueBTN_2_2_2 = new JLabel("monthly expense:");
 		monthly_revenueBTN_2_2_2.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -1079,6 +1024,7 @@ public class swINTER extends JFrame {
 		layeredPane.add(monthlySettingsPanel, "name_1062105994166900");
 
 		JLabel monthlySettingsTitle = new JLabel("Monthly Configurations");
+		monthlySettingsTitle.setBackground(SystemColor.activeCaption);
 		monthlySettingsTitle.setBounds(10, 11, 676, 86);
 		monthlySettingsTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		monthlySettingsTitle.setFont(new Font("Tahoma", Font.BOLD, 40));
@@ -1087,7 +1033,7 @@ public class swINTER extends JFrame {
 		revenueLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		revenueLabel.setBounds(10, 108, 308, 26);
 
-		JLabel createCategoriesLabel = new JLabel("Create Categories:");
+		JLabel createCategoriesLabel = new JLabel("Set Your Expense Categories:");
 		createCategoriesLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		createCategoriesLabel.setBounds(10, 292, 308, 37);
 
@@ -1129,7 +1075,7 @@ public class swINTER extends JFrame {
 		previewLabel.setBounds(378, 140, 82, 29);
 		monthlySettingsPanel.add(previewLabel);
 
-		JButton btnSwitchToAddCategory = new JButton("Add Category");
+		JButton btnSwitchToAddCategory = new JButton("Manage Categories");
 		btnSwitchToAddCategory.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnSwitchToAddCategory.setBounds(10, 340, 308, 37);
 		monthlySettingsPanel.add(btnSwitchToAddCategory);
@@ -1144,7 +1090,7 @@ public class swINTER extends JFrame {
 					monthlySettingsPanel, homePanel);
 		});
 
-		TextArea previewArea = new TextArea();
+
 		previewArea.setBounds(378, 175, 308, 335);
 		monthlySettingsPanel.add(previewArea);
 		previewArea.setText("this is my preview");
@@ -1154,6 +1100,21 @@ public class swINTER extends JFrame {
 		btnLoadPreview.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnLoadPreview.setBounds(459, 145, 144, 23);
 		monthlySettingsPanel.add(btnLoadPreview);
+		btnLoadPreview.addActionListener(mouseClicked->{
+			//Maybe we need observer!
+		});
+		
+		JButton btnLogoutMonthlyConfig = new JButton("Logout");
+		btnLogoutMonthlyConfig.setBackground(UIManager.getColor("textHighlight"));
+		btnLogoutMonthlyConfig.setForeground(Color.RED);
+		btnLogoutMonthlyConfig.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnLogoutMonthlyConfig.setBounds(570, 11, 116, 26);
+		monthlySettingsPanel.add(btnLogoutMonthlyConfig);
+		btnLogoutMonthlyConfig.addActionListener(mouseClicked->{
+			userController.logout(monthlySettingsPanel, loginPanel);
+		});
+		
+		
 		btnLoadPreview.addActionListener(mouseClicked -> {
 			// TODO
 			// LOAD PREVIEW !
@@ -1220,19 +1181,7 @@ public class swINTER extends JFrame {
 		expense_delete_all.add(btnNewButton_21);
 
 		JButton btnNewButton_22 = new JButton("delete");
-		btnNewButton_22.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Category deleteAllEx = categoryService.findCategory(textExDeleteAllCatName.getText());
-				if (deleteAllEx != null) {
-					expenseService.deleteAllExpensesInCategory(deleteAllEx.getTitle());
-					expenseService.printExpensesByCategory();
-				} else {
-					// TODO
-					// ERROR IF deleteAllEx DOESN'T EXISTS
-				}
-			}
-		});
+		
 		btnNewButton_22.setBounds(214, 453, 115, 29);
 		expense_delete_all.add(btnNewButton_22);
 

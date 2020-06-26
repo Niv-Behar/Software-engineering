@@ -41,15 +41,6 @@ public class ExpenseService {
 		return (Expense[]) this.expenses.get(categoryService.findCategory(categoryName).getId()).toArray();
 	}
 
-	public void printExpensesByCategory() {
-		this.expenses.forEach((categoryId, expenseList) -> {
-			System.out.println("CategoryId: "+categoryId);
-			for (Expense exp : expenseList) {
-				System.out.println(exp);
-			}
-			System.out.println("---------");
-		});
-	}
 
 	// Adding an expense and updating the amountUsed in that category!
 	public boolean addExpenseToCategory(String title, int amount, String categoryName) {
@@ -101,7 +92,6 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Authentication failed");
 			result = false;
 		}
 		return result;
@@ -149,7 +139,7 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Authentication failed in initExpenses");
+		
 			result = false;
 		}
 		return result;
@@ -201,7 +191,7 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Error");
+			
 			result = false;
 		}
 		return result;
@@ -233,7 +223,7 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Error");
+		
 			result = false;
 		}
 		return result;
