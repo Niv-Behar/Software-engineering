@@ -32,6 +32,7 @@ public class CategoryService {
     
     public String toString() {
     	StringBuilder builder=new StringBuilder();
+    	
     	this.categories.forEach(category->{
     		builder.append(category.toString());
     		builder.append('\n');

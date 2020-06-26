@@ -132,5 +132,9 @@ public class UserController extends Observable {
 		this.setChanged();
 		this.notifyObservers(categoryService.toString());
 	}
+	
+	public boolean getConfigStatus() {
+		return this.configService.getConfigStatus();
+	}
 
 }

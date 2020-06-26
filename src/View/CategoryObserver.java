@@ -16,8 +16,6 @@ public class CategoryObserver implements Observer {
 	
 	
 	public void update(Observable obs, Object obj) {
-		
-		
 		this.previewArea.setText((String) obj);
 
 	}

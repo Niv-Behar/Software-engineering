@@ -13,7 +13,7 @@ public class Category extends Operation {
 
 	@Override
 	public String toString() {
-		return "Category [title=" + title + ", amount=" + amount + ", amountUsed=" + amountUsed + "]";
+		return "Title:"+title+"   |   Amount:"+amount+"   |   Used:"+amountUsed;
 	}
 
 	@Override

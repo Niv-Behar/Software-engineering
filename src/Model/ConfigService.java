@@ -70,7 +70,6 @@ public class ConfigService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Config couldn't be created");
 			result = false;
 		}
 		return result;
@@ -108,7 +107,6 @@ public class ConfigService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Couldnt fetch config for this user!");
 			result = false;
 		}
 		return result;
@@ -135,7 +133,6 @@ public class ConfigService {
 			OutputStream os = conn.getOutputStream();
 			os.write(json.getBytes("UTF-8"));
 			os.close();
-			System.out.println("passed until response");
 			// read the response
 			InputStream in = new BufferedInputStream(conn.getInputStream());
 			String response = IOUtils.toString(in, "UTF-8");
@@ -143,7 +140,6 @@ public class ConfigService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			System.out.println("Update Config Failed");
 			result = false;
 		}
 		return result;

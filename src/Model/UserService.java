@@ -69,7 +69,7 @@ public class UserService implements Authentication{
 	            conn.disconnect();
 	        } catch (Exception e) {
 	            //In case of unsuccessful response with status of other then 200/201....
-	            System.out.println("Authentication failed");
+	           
 	            result = false;
 	        }
 	        return result;
@@ -105,7 +105,7 @@ public class UserService implements Authentication{
 	            conn.disconnect();
 	        } catch (Exception e) {
 	            //In case of unsuccessful response with status of other then 200/201....
-	            System.out.println("Email already exists!");
+	           
 	            result = false;
 	        }
 	        return result;
