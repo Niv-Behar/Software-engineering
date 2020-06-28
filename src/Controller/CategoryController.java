@@ -52,6 +52,7 @@ public class CategoryController extends Observable{
 	public void triggerObservers() {
 		this.setChanged();
 		this.notifyObservers(toString());
+		
 	}
 	
 	public String toString() {

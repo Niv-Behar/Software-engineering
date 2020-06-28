@@ -31,14 +31,34 @@ public class CategoryService {
     
     
     public String toString() {
+    	if(this.categories.size()==0) {
+    		return " ";
+    	}
+    	 
     	StringBuilder builder=new StringBuilder();
-    	
     	this.categories.forEach(category->{
     		builder.append(category.toString());
     		builder.append('\n');
     		
     	});
     	return builder.toString();
+    }
+    
+    public int spentThisMonth() {
+    	int spentAmount=0;
+    	for(Category cat:this.categories) {
+    	  spentAmount+=cat.amountUsed;
+    	}
+    	return spentAmount;
+    }
+    
+    public Category findCategoryById(String id) {
+    	for(Category cat:this.categories) {
+    		if(cat.getId().equalsIgnoreCase(id)) {
+    			return cat;
+    		}
+    	}
+    	return null;
     }
 
     
@@ -123,7 +143,8 @@ public class CategoryService {
             JSONObject myResponse = new JSONObject(response);
             JSONArray catJSONS = myResponse.getJSONArray("categories");
             int size = catJSONS.length();
-            this.categories.clear();
+           // this.categories.clear();
+            this.categories=new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 JSONObject obj = catJSONS.getJSONObject(i);
                 Category category = new Category(obj.getString("title"), obj.getInt("amount"), obj.getInt("amountUsed"),

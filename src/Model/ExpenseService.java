@@ -1,4 +1,5 @@
 package Model;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,7 +26,7 @@ public class ExpenseService {
 
 	// Singleton-
 	private ExpenseService() {
-		// expenses = new ArrayList<>();
+	
 		expenses = new HashMap<>();
 	}
 
@@ -36,11 +37,30 @@ public class ExpenseService {
 	}
 	// ---------
 
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		if (!this.expenses.isEmpty()) {
+			this.expenses.forEach((categoryId, expenseList) -> {
+				Category cat = categoryService.findCategoryById(categoryId);
+				builder.append(cat.toString() + "\n");
+				expenseList.forEach(expense -> {
+					builder.append(expense.toString() + "\n");
+				});
+				builder.append("\n");
+				
+			});
+			builder.append("Amount Spent This Month: "+categoryService.spentThisMonth()+"\n");
+			return builder.toString();
+		} else {
+			return "No Expenses have been added\n"+"Categories:\n"+categoryService.toString();
+		}
+
+	}
+
 	// returns an array of expenses that belong to a certain category of choice
 	public Expense[] findExpensesByCategory(String categoryName) {
 		return (Expense[]) this.expenses.get(categoryService.findCategory(categoryName).getId()).toArray();
 	}
-
 
 	// Adding an expense and updating the amountUsed in that category!
 	public boolean addExpenseToCategory(String title, int amount, String categoryName) {
@@ -75,17 +95,14 @@ public class ExpenseService {
 			JSONObject myResponse = new JSONObject(response);
 			String _id = myResponse.getString("_id");
 			Expense expense = new Expense(title, amount, userService.getUserId(), _id, foundCategory.getId());
-			if(this.expenses.containsKey(foundCategory.getId())) {
+			if (this.expenses.containsKey(foundCategory.getId())) {
 				this.expenses.get(foundCategory.getId()).add(expense);
-			}
-			else {
-				List<Expense> newList=new ArrayList<>();
+			} else {
+				List<Expense> newList = new ArrayList<>();
 				newList.add(expense);
-				this.expenses.put(foundCategory.getId(),newList );
+				this.expenses.put(foundCategory.getId(), newList);
 			}
 			foundCategory.amountUsed += amount;
-			System.out.println("amount is :"+foundCategory.amount);
-			System.out.println("amountUsed is now :"+foundCategory.amountUsed);
 			this.categoryService.updateCategory(foundCategory, userService.getToken());
 			// Closing connection
 			in.close();
@@ -122,16 +139,15 @@ public class ExpenseService {
 			this.expenses.clear();
 			for (int i = 0; i < size; i++) {
 				JSONObject obj = expJSONS.getJSONObject(i);
-				String categoryId=obj.getString("categoryId");
+				String categoryId = obj.getString("categoryId");
 				Expense expense = new Expense(obj.getString("title"), obj.getInt("amount"), obj.getString("creator"),
 						obj.getString("_id"), categoryId);
-				if(this.expenses.containsKey(categoryId)) {
+				if (this.expenses.containsKey(categoryId)) {
 					this.expenses.get(categoryId).add(expense);
-				}
-				else {
-					List<Expense> newList=new ArrayList<>();
+				} else {
+					List<Expense> newList = new ArrayList<>();
 					newList.add(expense);
-					this.expenses.put(categoryId,newList );
+					this.expenses.put(categoryId, newList);
 				}
 			}
 			// Closing connection
@@ -139,7 +155,7 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-		
+
 			result = false;
 		}
 		return result;
@@ -153,8 +169,8 @@ public class ExpenseService {
 
 	// Returns foundExpense or null if not exists!
 	public Expense findExpense(String title, int amount, String categoryId) {
-		for(Expense exp:this.expenses.get(categoryId)) {
-			if(exp.title.equalsIgnoreCase(title)&&exp.amount==amount) {
+		for (Expense exp : this.expenses.get(categoryId)) {
+			if (exp.title.equalsIgnoreCase(title) && exp.amount == amount) {
 				return exp;
 			}
 		}
@@ -181,8 +197,8 @@ public class ExpenseService {
 			conn.setDoInput(true);
 			conn.setRequestMethod("DELETE");
 			// read the response
-			  InputStream in = new BufferedInputStream(conn.getInputStream());
-	             String response = IOUtils.toString(in, "UTF-8");
+			InputStream in = new BufferedInputStream(conn.getInputStream());
+			String response = IOUtils.toString(in, "UTF-8");
 			this.expenses.get(foundCategory.getId()).remove(foundExpense);
 			foundCategory.amountUsed -= amount;
 			categoryService.updateCategory(foundCategory, userService.getToken());
@@ -191,16 +207,16 @@ public class ExpenseService {
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-			
+
 			result = false;
 		}
 		return result;
 	}
 
 	public boolean deleteAllExpensesInCategory(String categoryTitle) {
-		Category foundCategory=categoryService.findCategory(categoryTitle);
+		Category foundCategory = categoryService.findCategory(categoryTitle);
 		String categoryId = foundCategory.getId();
-		String query_url = restURL + "/" + categoryId+"/all";
+		String query_url = restURL + "/" + categoryId + "/all";
 		boolean result = true;
 		try {
 			URL url = new URL(query_url);
@@ -213,17 +229,17 @@ public class ExpenseService {
 			conn.setDoInput(true);
 			conn.setRequestMethod("DELETE");
 			// ---------------
-			  InputStream in = new BufferedInputStream(conn.getInputStream());
-	             String response = IOUtils.toString(in, "UTF-8");
+			InputStream in = new BufferedInputStream(conn.getInputStream());
+			String response = IOUtils.toString(in, "UTF-8");
 			this.expenses.remove(categoryId);
-			foundCategory.amountUsed=0;
-			categoryService.updateCategory(foundCategory,userService.getToken());
-			
+			foundCategory.amountUsed = 0;
+			categoryService.updateCategory(foundCategory, userService.getToken());
+
 			// Closing connection
 			conn.disconnect();
 		} catch (Exception e) {
 			// In case of unsuccessful response with status of other then 200/201....
-		
+
 			result = false;
 		}
 		return result;

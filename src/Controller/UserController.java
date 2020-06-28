@@ -60,7 +60,9 @@ public class UserController extends Observable {
 			configService.createConfig(userService.getUserId(), userService.getToken());
 			configService.fetchConfig(userService.getToken());
 			// Triggering the Observers that are listening to that Observable !
-			triggerObservers();
+			//triggerObservers();
+			this.setChanged();
+			this.notifyObservers(" ");
 			// --------------------------------
 
 			if (configService.getConfigStatus()) {
@@ -85,6 +87,8 @@ public class UserController extends Observable {
 	public void logout(JPanel currentPanel, JPanel nextPanel) {
 		UtilitiesController.swapPages(currentPanel, nextPanel);
 		userService.logout();
+		this.setChanged();
+		this.notifyObservers("");
 	}
 
 	public void submitConfiguration(String monthlyRevenue, String wantedSaving, JRadioButton precents,

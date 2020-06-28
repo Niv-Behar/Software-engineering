@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controller.CategoryController;
+import Controller.ExpenseController;
 import Controller.UserController;
 import Controller.UtilitiesController;
 import Model.Category;
@@ -58,11 +59,17 @@ import javax.swing.JTextArea;
 import java.awt.TextArea;
 import javax.swing.JTable;
 import javax.swing.DropMode;
+import java.awt.List;
+import javax.swing.border.TitledBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JList;
 
 public class swINTER extends JFrame {
     //Controllers:
 	private UserController userController = new UserController();
 	private CategoryController categoryController = new CategoryController();
+	private ExpenseController expenseController=new ExpenseController();
 	
 	private JTextField loginEmail;
 	private JPasswordField loginPassword;
@@ -81,8 +88,16 @@ public class swINTER extends JFrame {
 	private JLabel userMonthlyRevenue=new JLabel("userMonthlyRevenue");//Going to Display the updated userMonthlyRevenue
 	private JLabel userWantedSaveAmount=new JLabel("userWantedSaveAmount");//Going to Display the updated userWantedSaveAmount
 	private JLabel userTotalSaved=new JLabel("userTotalSaved");//Going to Display the total saved so far amount
+	private JLabel userTotalSpendMonthly=new JLabel("userTotalSpendMonthly");//Going to display total monthly spend so far !
 	private TextArea previewArea=new TextArea("previewArea");//Going to Display the preview of the categories
 	private TextArea categoriesDisplay=new TextArea("Display Categories");//Display categories on homePanel
+	private JPanel expensePanel;
+	private JTextField categoryNameField;
+	private JTextField expenseNameField;
+	private JTextField expenseAmountField;
+	private TextArea expensesPreview=new TextArea("Display Expenses");
+	private JLabel userLeftToSpend=new JLabel("userLeftToSpend");//Display how much left to spend!
+
 	
 
 	/**
@@ -106,15 +121,11 @@ public class swINTER extends JFrame {
 	 */
 	public swINTER() {
 		setTitle("Money Saver");
-		// Creating the Services:
-		UserService userService = UserService.getInstance();
-		CategoryService categoryService = CategoryService.getInstance();
-		ExpenseService expenseService = ExpenseService.getInstance();
-		// ----------
 		//Creating my Observers:
-		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount,this.userTotalSaved);
+		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount,this.userTotalSaved,this.userTotalSpendMonthly,this.userLeftToSpend);
 		CategoryObserver categoryObserverSettingPanel=new CategoryObserver(this.previewArea);
 		CategoryObserver categoryObserverHomePanel=new CategoryObserver(this.categoriesDisplay);
+		ExpenseObserver expenseObserver=new ExpenseObserver(this.expensesPreview);
 		//-----------
 		//Adding Observer to Observable:
 		userController.addObserver(configObserver);
@@ -122,8 +133,7 @@ public class swINTER extends JFrame {
 		userController.addObserver(categoryObserverHomePanel);
 		categoryController.addObserver(categoryObserverSettingPanel);
 		categoryController.addObserver(categoryObserverHomePanel);
-		
-		
+	    expenseController.addObserver(expenseObserver);
 		// --------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 559);
@@ -279,9 +289,6 @@ public class swINTER extends JFrame {
 		//Logout from homePanel!
 		btnLogout.addActionListener(mouseClicked->{
 			userController.logout(homePanel,loginPanel,loginEmail,loginPassword);
-//			loginEmail.setText("");
-//			loginPassword.setText("");
-//			UtilitiesController.swapPages(homePanel, loginPanel);
 		});
 
 		JButton btnEditMonthlyConfig = new JButton("Edit Monthly Settings");
@@ -292,31 +299,31 @@ public class swINTER extends JFrame {
 		});
 		btnEditMonthlyConfig.setForeground(Color.BLUE);
 		btnEditMonthlyConfig.setBackground(UIManager.getColor("Button.background"));
-		btnEditMonthlyConfig.setBounds(10, 219, 267, 46);
+		btnEditMonthlyConfig.setBounds(10, 396, 267, 46);
 		homePanel.add(btnEditMonthlyConfig);
 		userMonthlyRevenue.setForeground(Color.WHITE);
 
-		//userMonthlyRevenue = new JLabel("asd");
+	
 		userMonthlyRevenue.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		userMonthlyRevenue.setBounds(10, 73, 255, 39);
+		userMonthlyRevenue.setBounds(10, 83, 255, 39);
 		homePanel.add(userMonthlyRevenue);
 		userWantedSaveAmount.setForeground(Color.WHITE);
 		
-	//	userWantedSaveAmount = new JLabel("asda");
+	
 		userWantedSaveAmount.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		userWantedSaveAmount.setBounds(10, 119, 255, 39);
+		userWantedSaveAmount.setBounds(10, 117, 255, 39);
 		homePanel.add(userWantedSaveAmount);
 		userTotalSaved.setForeground(Color.WHITE);
 		
-		//userTotalSaved = new JLabel("userTotalSaved");
+		
 		userTotalSaved.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		userTotalSaved.setBounds(10, 169, 255, 39);
+		userTotalSaved.setBounds(10, 326, 255, 39);
 		homePanel.add(userTotalSaved);
 		
 		JButton btnFinishMonth = new JButton("End Current Month");
 		
 		btnFinishMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnFinishMonth.setBounds(10, 462, 267, 47);
+		btnFinishMonth.setBounds(419, 462, 267, 47);
 		homePanel.add(btnFinishMonth);
 		
 		JTextArea txtrResetsMonthlySettings = new JTextArea();
@@ -324,21 +331,28 @@ public class swINTER extends JFrame {
 		txtrResetsMonthlySettings.setBackground(Color.DARK_GRAY);
 		txtrResetsMonthlySettings.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtrResetsMonthlySettings.setText("Resets Monthly Settings And\r\nconducts a monthly report !");
-		txtrResetsMonthlySettings.setBounds(10, 412, 267, 46);
+		txtrResetsMonthlySettings.setBounds(419, 410, 267, 46);
 		homePanel.add(txtrResetsMonthlySettings);
 		
-		JButton btnNewButton = new JButton("Manage My Expenses");
-		btnNewButton.setBackground(UIManager.getColor("Button.background"));
-		btnNewButton.setForeground(Color.BLACK);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnNewButton.setBounds(10, 305, 267, 47);
-		homePanel.add(btnNewButton);
+		JButton btnSwitchToExpenses = new JButton("Manage My Expenses");
+		btnSwitchToExpenses.setBackground(UIManager.getColor("Button.background"));
+		btnSwitchToExpenses.setForeground(Color.BLACK);
+		btnSwitchToExpenses.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnSwitchToExpenses.setBounds(10, 462, 267, 47);
+		homePanel.add(btnSwitchToExpenses);
+		btnSwitchToExpenses.addActionListener(mouseClicked->{
+			expenseController.init();
+			UtilitiesController.swapPages(homePanel, expensePanel);
+		});
+		
 		categoriesDisplay.setForeground(Color.WHITE);
 		categoriesDisplay.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		//categoriesDisplay = new TextArea();
+		
+		
+		
 		categoriesDisplay.setBackground(Color.DARK_GRAY);
-		categoriesDisplay.setBounds(340, 128, 346, 381);
+		categoriesDisplay.setBounds(340, 128, 346, 276);
 		homePanel.add(categoriesDisplay);
 		
 		JLabel lblDisplayCategories = new JLabel("My Categories:");
@@ -346,11 +360,105 @@ public class swINTER extends JFrame {
 		lblDisplayCategories.setForeground(Color.WHITE);
 		lblDisplayCategories.setBounds(340, 83, 346, 39);
 		homePanel.add(lblDisplayCategories);
+		
+		
+		userTotalSpendMonthly.setForeground(Color.WHITE);
+		userTotalSpendMonthly.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		userTotalSpendMonthly.setBounds(10, 152, 324, 39);
+		homePanel.add(userTotalSpendMonthly);
+		
+	//	userLeftToSpend = new JLabel("New label");
+		userLeftToSpend.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		userLeftToSpend.setForeground(Color.WHITE);
+		userLeftToSpend.setBounds(10, 202, 255, 39);
+		homePanel.add(userLeftToSpend);
 
-		JPanel emptyPanel1 = new JPanel();
-		emptyPanel1.setBackground(Color.LIGHT_GRAY);
-		layeredPane.add(emptyPanel1, "name_1061712366015000");
-		emptyPanel1.setLayout(null);
+		expensePanel = new JPanel();
+		expensePanel.setBackground(Color.DARK_GRAY);
+		layeredPane.add(expensePanel, "name_1061712366015000");
+		expensePanel.setLayout(null);
+		
+		JButton btnBackFromExpensePanel = new JButton("Back");
+		btnBackFromExpensePanel.setForeground(Color.RED);
+		btnBackFromExpensePanel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnBackFromExpensePanel.setBounds(10, 11, 89, 23);
+		expensePanel.add(btnBackFromExpensePanel);
+		btnBackFromExpensePanel.addActionListener(mouseClicked->{
+			userController.triggerObservers();
+			categoryController.triggerObservers();
+			UtilitiesController.swapPages(expensePanel, homePanel);
+		});
+		
+		categoryNameField = new JTextField();
+		categoryNameField.setBounds(10, 153, 263, 37);
+		expensePanel.add(categoryNameField);
+		categoryNameField.setColumns(10);
+		
+		expenseNameField = new JTextField();
+		expenseNameField.setBounds(10, 237, 263, 37);
+		expensePanel.add(expenseNameField);
+		expenseNameField.setColumns(10);
+		
+		expenseAmountField = new JTextField();
+		expenseAmountField.setBounds(10, 320, 263, 37);
+		expensePanel.add(expenseAmountField);
+		expenseAmountField.setColumns(10);
+		expensesPreview.setForeground(Color.WHITE);
+		expensesPreview.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		expensesPreview.setBackground(Color.DARK_GRAY);
+		
+	
+		expensesPreview.setBounds(306, 116, 380, 394);
+		expensePanel.add(expensesPreview);
+		
+		JLabel lblMyExpenses = new JLabel("My Expenses");
+		lblMyExpenses.setForeground(Color.WHITE);
+		lblMyExpenses.setFont(new Font("Tahoma", Font.PLAIN, 38));
+		lblMyExpenses.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMyExpenses.setBounds(10, 11, 676, 86);
+		expensePanel.add(lblMyExpenses);
+		
+		JLabel lblCategoryName = new JLabel("Category Name:");
+		lblCategoryName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblCategoryName.setForeground(Color.WHITE);
+		lblCategoryName.setBounds(10, 116, 215, 37);
+		expensePanel.add(lblCategoryName);
+		
+		JLabel lblExpenseName = new JLabel("Expense Name:");
+		lblExpenseName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblExpenseName.setForeground(Color.WHITE);
+		lblExpenseName.setBounds(10, 201, 215, 37);
+		expensePanel.add(lblExpenseName);
+		
+		JLabel lblExpenseAmount = new JLabel("Amount Spent:");
+		lblExpenseAmount.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblExpenseAmount.setForeground(Color.WHITE);
+		lblExpenseAmount.setBounds(10, 285, 215, 37);
+		expensePanel.add(lblExpenseAmount);
+		
+		JButton btnAddExpense = new JButton("Add Expense");
+		btnAddExpense.setForeground(Color.BLACK);
+		btnAddExpense.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnAddExpense.setBounds(10, 403, 263, 37);
+		expensePanel.add(btnAddExpense);
+		btnAddExpense.addActionListener(mouseClicked->{
+			expenseController.addExpense(categoryNameField.getText(), expenseNameField.getText(), expenseAmountField.getText());
+		});
+		
+		JButton btnRemoveExpense = new JButton("Delete Expense");
+		btnRemoveExpense.setForeground(Color.RED);
+		btnRemoveExpense.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnRemoveExpense.setBounds(10, 451, 263, 37);
+		expensePanel.add(btnRemoveExpense);
+		btnRemoveExpense.addActionListener(mouseClicked->{
+			expenseController.deleteExpense(categoryNameField.getText(), expenseNameField.getText(), expenseAmountField.getText());
+		});
+		
+		
+		
+		
+		
+		
 
 		JPanel emptyPanel2 = new JPanel();
 		emptyPanel2.setBackground(Color.LIGHT_GRAY);
@@ -510,7 +618,7 @@ public class swINTER extends JFrame {
 		monthlySettingsPanel.add(btnSwitchToAddCategory);
 
 		JButton btnSubmitConfigurations = new JButton("Submit Configurations");
-		btnSubmitConfigurations.setForeground(Color.PINK);
+		btnSubmitConfigurations.setForeground(Color.DARK_GRAY);
 		btnSubmitConfigurations.setFont(new Font("Tahoma", Font.BOLD, 24));
 		btnSubmitConfigurations.setBounds(10, 430, 308, 65);
 		monthlySettingsPanel.add(btnSubmitConfigurations);
@@ -535,11 +643,13 @@ public class swINTER extends JFrame {
 		monthlySettingsPanel.add(btnLogoutMonthlyConfig);
 		
 		JButton btnBackMonthlySettings = new JButton("Back");
+		btnBackMonthlySettings.setForeground(Color.RED);
 		btnBackMonthlySettings.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnBackMonthlySettings.setBounds(7, 8, 89, 23);
 		monthlySettingsPanel.add(btnBackMonthlySettings);
 		btnBackMonthlySettings.addActionListener(mouseClicked->{
 		     if(userController.getConfigStatus()) {
+		    	 userController.triggerObservers();
 		    	 UtilitiesController.swapPages(monthlySettingsPanel, homePanel);
 		     }else {
 		    	 JOptionPane.showMessageDialog(null,"First Finish Your Configuration!");
