@@ -33,7 +33,18 @@ public class ConfigService {
 	public static ConfigService getInstance() {
 		return INSTANCE;
 	}
-
+    public String configReport(int totalSpent) {
+    	StringBuilder builder=new StringBuilder();
+    	builder.append("Monthly Revenue : "+this.monthlyRevenue+"\n");
+    	builder.append("Monthly Saving Goal : "+this.wantedSaveValue+
+    			" "+(this.monthlyRevenue-totalSpent>=this.wantedSaveValue?"Successfull Goal!":"Failed This Month's Goal")+"\n");
+    	builder.append("Total Saved This Month : "+(this.monthlyRevenue-totalSpent)+" "+
+    			(this.monthlyRevenue-totalSpent>=this.wantedSaveValue?"Successfull Goal!":"Failed This Month's Goal")+"\n");
+    	builder.append("Total Spent This Month : "+totalSpent+"\n");
+    	builder.append("\nTotal Saved So Far : "+this.totalSaved+"\n");
+    	
+    	return builder.toString();
+    }
 	// Creating only when a new account is created ! - AKA after Signup!
 	public boolean createConfig(String userId, String token) {
 		boolean result = true;

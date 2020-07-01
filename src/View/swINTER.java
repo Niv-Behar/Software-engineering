@@ -104,6 +104,7 @@ public class swINTER extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -325,6 +326,9 @@ public class swINTER extends JFrame {
 		btnFinishMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnFinishMonth.setBounds(419, 462, 267, 47);
 		homePanel.add(btnFinishMonth);
+		btnFinishMonth.addActionListener(mouseClicked->{
+			UtilitiesController.writeReport();
+		});
 		
 		JTextArea txtrResetsMonthlySettings = new JTextArea();
 		txtrResetsMonthlySettings.setForeground(Color.WHITE);

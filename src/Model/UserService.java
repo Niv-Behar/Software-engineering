@@ -11,6 +11,7 @@ import org.json.JSONObject;
 public class UserService implements Authentication{
 	  private String token;
 	    private String userId;
+	    private String email;
 	    private static final String restURL = "http://schoolproject-env.eba-qp6e4y82.us-east-2.elasticbeanstalk.com/" + "api/user";
 	    //Injection of services:
  
@@ -33,6 +34,9 @@ public class UserService implements Authentication{
 
 	    public String getUserId() {
 	        return userId;
+	    }
+	    public String getEmail() {
+	    	return email;
 	    }
 
 	    /*Returns true if successful login and assigns userId and token from response
@@ -62,6 +66,7 @@ public class UserService implements Authentication{
 	            JSONObject myResponse = new JSONObject(response);
 	            this.token = myResponse.getString("token");
 	            this.userId = myResponse.getString("userId");
+	            this.email=email;
 	            //Upon successfull login :
 	          
 	            //Closing connection
@@ -115,6 +120,7 @@ public class UserService implements Authentication{
 	    public void logout() {
 	        this.token = null;
 	        this.userId = null;
+	        this.email=null;
 	    }    
 
 }

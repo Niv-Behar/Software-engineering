@@ -42,7 +42,8 @@ public class ExpenseService {
 		if (!this.expenses.isEmpty()) {
 			this.expenses.forEach((categoryId, expenseList) -> {
 				Category cat = categoryService.findCategoryById(categoryId);
-				builder.append(cat.toString() + "\n");
+				builder.append("Category: "+cat.toString() + "\n");
+				builder.append("Expenses in that category: \n");
 				expenseList.forEach(expense -> {
 					builder.append(expense.toString() + "\n");
 				});
