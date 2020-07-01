@@ -1,5 +1,6 @@
 package Controller;
 
+import java.util.List;
 import java.util.Observable;
 
 import javax.swing.JOptionPane;
@@ -47,6 +48,14 @@ public class CategoryController extends Observable{
 			triggerObservers();
 			UtilitiesController.swapPages(currentPanel, nextPanel);
 		}
+	}
+	
+	public void deleteAll(JPanel currentPanel,JPanel nextPanel) {
+	  categoryService.deleteAllByUser(userService.getToken());
+	  expenseService.deleteAllByUser(userService.getToken());
+
+	  triggerObservers();
+	  UtilitiesController.swapPages(currentPanel, nextPanel);
 	}
 	
 	public void triggerObservers() {

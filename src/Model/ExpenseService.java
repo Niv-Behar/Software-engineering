@@ -245,5 +245,30 @@ public class ExpenseService {
 		}
 		return result;
 	}
+	 public boolean deleteAllByUser(String token) {
+	    	String query_url=restURL;
+	    	  boolean result = true;
+	          try {
+	              URL url = new URL(query_url);
+	              HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	              conn.setConnectTimeout(5000);
+	              //Setting header: for authorization
+	              conn.setRequestProperty("Authorization", "Bearer " + token);
+	              conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+	              conn.setDoOutput(true);
+	              conn.setDoInput(true);
+	              conn.setRequestMethod("DELETE");
+	              // read the response
+	              InputStream in = new BufferedInputStream(conn.getInputStream());
+	              String response = IOUtils.toString(in, "UTF-8");
+	              this.expenses.clear();//Reset!
 
+	              //Closing connection
+	              conn.disconnect();
+	          } catch (Exception e) {
+	              //In case of unsuccessful response with status of other then 200/201....
+	              result = false;
+	          }
+	          return result;
+	    }
 }

@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Observer;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Model.Category;
 import Model.CategoryService;
 import Model.ConfigService;
 import Model.ExpenseService;
@@ -22,16 +24,20 @@ public class UtilitiesController {
 
 	}
 
-	public static void writeReport() {
+	public static boolean writeReport() {
 		UserService userService = UserService.getInstance();
 		CategoryService categoryService = CategoryService.getInstance();
 		ExpenseService expenseService = ExpenseService.getInstance();
 		ConfigService configService = ConfigService.getInstance();
+		
+		boolean result=true;
 
 		try {
 			Date date=new Date();
 			
-			FileWriter myWriter = new FileWriter("Reports\\" +"Month#"+date.getMonth() +"_"+userService.getEmail()+ ".md");
+			FileWriter myWriter = new FileWriter("Reports\\" +"Month#"+date.getMonth() +"_"+userService.getEmail()+
+					+date.getTime()+".md");
+			
 			myWriter.write("Month Number"+date.getMonth()+" Report:\n\n\n");
             myWriter.write(configService.configReport(categoryService.spentThisMonth()));
             
@@ -42,10 +48,20 @@ public class UtilitiesController {
             myWriter.write(expenseService.toString());
 			myWriter.close();
 			
+			configService.endMonth();
+			configService.updateConfig(userService.getToken());
+					
+			
+		
+			JOptionPane.showMessageDialog(null, "Monthly Report Successfully Conducted!");
+			
+			
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
+			result=false;
 		}
+		return result;
 	}
 
 }

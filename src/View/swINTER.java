@@ -327,7 +327,11 @@ public class swINTER extends JFrame {
 		btnFinishMonth.setBounds(419, 462, 267, 47);
 		homePanel.add(btnFinishMonth);
 		btnFinishMonth.addActionListener(mouseClicked->{
-			UtilitiesController.writeReport();
+			boolean result=UtilitiesController.writeReport();
+			if(result==true) {
+				categoryController.deleteAll(homePanel,monthlySettingsPanel);
+			}
+		     
 		});
 		
 		JTextArea txtrResetsMonthlySettings = new JTextArea();

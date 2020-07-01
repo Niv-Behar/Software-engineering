@@ -35,6 +35,9 @@ public class ConfigService {
 	}
     public String configReport(int totalSpent) {
     	StringBuilder builder=new StringBuilder();
+    	
+    	this.totalSaved+=this.monthlyRevenue-totalSpent;
+    	System.out.println(this.totalSaved);
     	builder.append("Monthly Revenue : "+this.monthlyRevenue+"\n");
     	builder.append("Monthly Saving Goal : "+this.wantedSaveValue+
     			" "+(this.monthlyRevenue-totalSpent>=this.wantedSaveValue?"Successfull Goal!":"Failed This Month's Goal")+"\n");
@@ -184,5 +187,11 @@ public class ConfigService {
 	}
 	public boolean getConfigStatus() {
 		return configStatus;
+	}
+	
+	public void endMonth() {
+		this.configStatus=false;
+		this.monthlyRevenue=0;
+		this.wantedSaveValue=0;
 	}
 }
