@@ -1,0 +1,30 @@
+title Add Category
+
+
+actor User
+
+participant CategoryController
+participant CategoryService
+database DB
+
+User->CategoryController:addCategory(title,amount)
+activate CategoryController
+note over CategoryController:Validates Input
+CategoryController->CategoryService:addCategory(title,amount)
+
+activate CategoryService
+CategoryService->DB:save(Category)
+activate DB
+DB-->CategoryService:success
+deactivate DB
+note over CategoryService:Adds Category to Categories list
+
+CategoryService-->CategoryController:success
+deactivate CategoryService
+
+CategoryController->Observers:notifyObservers
+activate Observers
+Observers-->User:Update User Interface
+deactivate Observers
+CategoryController-->User:success
+deactivate CategoryController

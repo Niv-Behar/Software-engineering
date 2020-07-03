@@ -1,0 +1,63 @@
+title Delete An Expense
+
+actor User
+participant ExpenseController
+participant ExpenseService
+participant CategoryService
+database DB
+
+User->ExpenseController:deleteExpense(categoryName,expenseName,amount)
+
+activate ExpenseController
+
+note over ExpenseController:Checks if input is valid
+ExpenseController->ExpenseService:deleteExpense(categoryName,expenseName,amount)
+activate ExpenseService
+note over ExpenseService:Checks if HashMap.contains(category)\nAnd the value of that key,contains a \nmatching expense!
+
+
+ExpenseService->DB:delete(expenseId)
+activate DB
+DB-->ExpenseService:Deleted Successfully
+deactivate DB
+
+note over ExpenseService:Remove expense from HashMap\nTo keep data updated without having to \nmake a new GET query
+
+ExpenseService->CategoryService:updateCategory(category)
+
+activate CategoryService
+
+CategoryService->DB:PUT(category)
+activate DB
+DB-->CategoryService:Success
+deactivate DB
+
+
+note over CategoryService:Updated categories list\nTo Keep data updated
+
+
+CategoryService-->ExpenseService:Success
+deactivate CategoryService
+
+ExpenseService-->ExpenseController:Success
+deactivate ExpenseService
+
+ExpenseController->Observers:notifyObservers
+activate Observers
+Observers-->User:Updating UI
+deactivate Observers
+
+ExpenseController-->User:Success
+deactivate ExpenseController
+
+
+
+
+
+
+
+
+
+
+
+

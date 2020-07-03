@@ -1,0 +1,92 @@
+title Signup
+
+actor User
+
+participant UserController
+
+participant UserService
+
+participant ConfigService
+
+database DB
+
+User->UserController:signup(email,password)
+
+activate UserController
+UserController->UserService:signup(email,password)
+activate UserService
+
+UserService->DB:save(new User(email,password))
+activate DB
+note over DB:Checks if email exists already
+
+DB-->UserService:true
+
+deactivate DB
+
+UserService-->UserController:true
+deactivate UserService
+UserController->UserService:login(email,password)
+activate UserService
+UserService->DB:getToken(email,password)
+
+activate DB
+note over DB:Calculates unique JWT
+
+DB-->UserService:token:String
+
+deactivate DB
+
+UserService-->UserController:token:String
+deactivate UserService
+UserController->ConfigService:createConfig(token)
+activate ConfigService
+note over ConfigService:Create A New Config File for the Data encoded inside the token
+
+ConfigService->DB:save(userConfig)
+activate DB
+DB-->ConfigService:Data in JSON Format
+deactivate DB
+
+ConfigService-->UserController:success
+deactivate ConfigService
+
+UserController-->User:Successfull! SwapPage(nextPage)
+deactivate UserController
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
