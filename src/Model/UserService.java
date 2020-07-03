@@ -8,7 +8,7 @@ import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
-public class UserService implements Authentication{
+public class UserService implements IAuthentication{
 	  private String token;
 	    private String userId;
 	    private String email;

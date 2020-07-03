@@ -80,6 +80,8 @@ public class UserController extends Observable {
 
 		email.setText("");
 		password.setText("");
+		this.setChanged();
+		this.notifyObservers("");
 		UtilitiesController.swapPages(currentPanel, nextPanel);
 		userService.logout();
 	}

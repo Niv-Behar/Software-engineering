@@ -65,7 +65,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JList;
 
-public class swINTER extends JFrame {
+public class UserInterface extends JFrame {
     //Controllers:
 	private UserController userController = new UserController();
 	private CategoryController categoryController = new CategoryController();
@@ -108,7 +108,7 @@ public class swINTER extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					swINTER frame = new swINTER();
+					UserInterface frame = new UserInterface();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -120,7 +120,7 @@ public class swINTER extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public swINTER() {
+	public UserInterface() {
 		setTitle("Money Saver");
 		//Creating my Observers:
 		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount,this.userTotalSaved,this.userTotalSpendMonthly,this.userLeftToSpend);
