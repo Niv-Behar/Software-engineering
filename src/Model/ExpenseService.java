@@ -162,11 +162,7 @@ public class ExpenseService {
 		return result;
 	}
 
-	// Updating a certain expense!
-	public boolean updateExpense(String title, int amount, String newTitle, int newAmount) {
-		// TODO
-		return true;
-	}
+
 
 	// Returns foundExpense or null if not exists!
 	public Expense findExpense(String title, int amount, String categoryId) {
