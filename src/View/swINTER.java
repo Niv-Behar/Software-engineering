@@ -65,7 +65,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JList;
 
-public class UserInterface extends JFrame {
+public class swINTER extends JFrame {
     //Controllers:
 	private UserController userController = new UserController();
 	private CategoryController categoryController = new CategoryController();
@@ -108,7 +108,7 @@ public class UserInterface extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UserInterface frame = new UserInterface();
+					swINTER frame = new swINTER();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -120,7 +120,7 @@ public class UserInterface extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UserInterface() {
+	public swINTER() {
 		setTitle("Money Saver");
 		//Creating my Observers:
 		ConfigObserver configObserver=new ConfigObserver(this.userMonthlyRevenue,this.userWantedSaveAmount,this.userTotalSaved,this.userTotalSpendMonthly,this.userLeftToSpend);
@@ -461,22 +461,6 @@ public class UserInterface extends JFrame {
 		btnRemoveExpense.addActionListener(mouseClicked->{
 			expenseController.deleteExpense(categoryNameField.getText(), expenseNameField.getText(), expenseAmountField.getText());
 		});
-		
-		
-		
-		
-		
-		
-
-		JPanel emptyPanel2 = new JPanel();
-		emptyPanel2.setBackground(Color.LIGHT_GRAY);
-		layeredPane.add(emptyPanel2, "name_1062012735486200");
-		emptyPanel2.setLayout(null);
-
-		JPanel emptyPanel3 = new JPanel();
-		emptyPanel3.setBackground(Color.LIGHT_GRAY);
-		layeredPane.add(emptyPanel3, "name_1062091668281100");
-		emptyPanel3.setLayout(null);
 
 		addCategoryPanel = new JPanel();
 		addCategoryPanel.setBackground(Color.DARK_GRAY);
@@ -496,11 +480,6 @@ public class UserInterface extends JFrame {
 		JTextPane addCategoryAmount = new JTextPane();
 		addCategoryAmount.setBounds(10, 201, 676, 43);
 		addCategoryPanel.add(addCategoryAmount);
-
-		JPanel emptyPanel4 = new JPanel();
-		emptyPanel4.setBackground(Color.LIGHT_GRAY);
-		layeredPane.add(emptyPanel4, "name_1062095649858400");
-		emptyPanel4.setLayout(null);
 
 		
 
